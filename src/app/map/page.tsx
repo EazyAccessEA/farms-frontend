@@ -47,13 +47,49 @@ export default function MapPage() {
         const L = await import("leaflet");
         
         // Create map centered on UK with PuredgeOS clarity
-        const map = L.default.map(mapElRef.current!).setView([54.5, -2.5], 6);
+        const map = L.default.map(mapElRef.current!, {
+          center: [54.5, -2.5],
+          zoom: 6,
+          zoomControl: true,
+          scrollWheelZoom: true,
+          doubleClickZoom: true,
+          boxZoom: true,
+          keyboard: true,
+          dragging: true,
+          touchZoom: true
+        });
         mapRef.current = map;
 
-        // Add tile layer with attribution
-        L.default.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors"
+        // Add primary tile layer with attribution and proper configuration
+        const primaryTileLayer = L.default.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors",
+          maxZoom: 19,
+          minZoom: 1,
+          tileSize: 256,
+          zoomOffset: 0,
+          updateWhenIdle: true,
+          updateWhenZooming: false
         }).addTo(map);
+
+        // Add fallback tile layer in case primary fails
+        const fallbackTileLayer = L.default.tileLayer("https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png", {
+          attribution: "&copy; Stadia Maps",
+          maxZoom: 20,
+          minZoom: 1
+        });
+
+        // Handle tile loading errors
+        primaryTileLayer.on('tileerror', () => {
+          console.warn('Primary tile layer failed, switching to fallback');
+          map.removeLayer(primaryTileLayer);
+          fallbackTileLayer.addTo(map);
+        });
+
+        // Force tile refresh and map resize after initialization
+        setTimeout(() => {
+          map.invalidateSize();
+          primaryTileLayer.redraw();
+        }, 200);
 
         // Add markers with PuredgeOS signature moments
         farms.forEach((farm) => {
