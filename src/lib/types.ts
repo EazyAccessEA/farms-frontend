@@ -1,4 +1,3 @@
-import type { ListingSchema } from "@farm/schema";
 // The json2ts generator emitted ambient types in @farm/schema/dist/types.d.ts.
 // For DX, define a local interface using fields we need most often:
 export interface FarmListing {

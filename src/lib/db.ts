@@ -1,3 +1,5 @@
-import { pool } from "@farm/schema";
+import { Pool } from "pg";
 
-export { pool };
+// Frontend uses read-only database connection
+const connectionString = process.env.DATABASE_URL!;
+export const pool = new Pool({ connectionString, max: 3 });

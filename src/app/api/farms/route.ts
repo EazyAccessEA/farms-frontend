@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const organicOnly = url.searchParams.get("organic") === "true";
 
   const clauses = [`record_status='verified'`];
-  const params: any[] = [];
+  const params: string[] = [];
   if (tag) {
     params.push(tag);
     clauses.push(`$${params.length} = any(produce_tags)`);
