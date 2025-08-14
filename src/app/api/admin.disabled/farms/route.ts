@@ -19,6 +19,13 @@ export async function GET(req: NextRequest) {
   try {
     await checkAdminAuth(req);
     
+    if (!adminPool) {
+      return NextResponse.json(
+        { error: 'Database not available' },
+        { status: 503 }
+      );
+    }
+    
     const url = new URL(req.url);
     const status = url.searchParams.get("status");
     
@@ -46,6 +53,13 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     await checkAdminAuth(req);
+    
+    if (!adminPool) {
+      return NextResponse.json(
+        { error: 'Database not available' },
+        { status: 503 }
+      );
+    }
     
     const body = await req.json();
     const { id, record_status, verified_by } = body;

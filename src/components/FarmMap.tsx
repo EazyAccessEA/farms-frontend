@@ -31,5 +31,18 @@ interface FarmMapProps {
 }
 
 export default function FarmMap({ farms, className = "" }: FarmMapProps) {
+  console.log("FarmMap render - farms:", farms, "className:", className);
+  
+  if (!farms || farms.length === 0) {
+    return (
+      <div className={`h-96 w-full bg-gray-100 flex items-center justify-center ${className}`}>
+        <div className="text-center">
+          <p className="text-gray-600">No farm data available</p>
+          <p className="text-sm text-gray-500 mt-2">Farms: {JSON.stringify(farms)}</p>
+        </div>
+      </div>
+    );
+  }
+
   return <FarmMapComponent farms={farms} className={className} />;
 }
