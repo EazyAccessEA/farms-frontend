@@ -30,10 +30,10 @@ export default function MapPage() {
         setFarms(data);
         setLoading(false);
       })
-      .catch((e) => {
-        setError("Unable to load farm locations");
-        setLoading(false);
-      });
+              .catch(() => {
+          setError("Unable to load farm locations");
+          setLoading(false);
+        });
   }, []);
 
   // Initialize map with PuredgeOS immersion
@@ -92,9 +92,9 @@ export default function MapPage() {
             });
           }
         });
-      } catch (error) {
-        setError("Map failed to load");
-      }
+              } catch {
+          setError("Map failed to load");
+        }
     };
 
     initMap();
