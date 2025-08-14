@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from "react";
+import { PuredgeOS, PuredgeOSComponents, PuredgeOSUtils } from '@/lib/puredgeos';
 
 type Farm = {
   id: string;
@@ -21,6 +22,7 @@ export default function MapPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // Load farm data with PuredgeOS clarity
   useEffect(() => {
@@ -30,10 +32,10 @@ export default function MapPage() {
         setFarms(data);
         setLoading(false);
       })
-              .catch(() => {
-          setError("Unable to load farm locations");
-          setLoading(false);
-        });
+      .catch(() => {
+        setError("Unable to load farm locations");
+        setLoading(false);
+      });
   }, []);
 
   // Initialize map with PuredgeOS immersion
@@ -60,18 +62,18 @@ export default function MapPage() {
             
             // PuredgeOS clarity: Clear, actionable popup content
             const popupHtml = `
-              <div style="min-width:280px; padding:16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                <h3 style="margin:0 0 8px 0; font-size:18px; font-weight:600; color:#1a1a1a;">${farm.name}</h3>
-                <p style="margin:0 0 12px 0; font-size:14px; color:#666; line-height:1.4;">
+              <div style="min-width:280px; padding:16px; font-family: ${PuredgeOS.typography.fontFamily.primary};">
+                <h3 style="margin:0 0 8px 0; font-size:18px; font-weight:600; color:${PuredgeOS.colors.semantic.text.primary};">${farm.name}</h3>
+                <p style="margin:0 0 12px 0; font-size:14px; color:${PuredgeOS.colors.semantic.text.secondary}; line-height:1.4;">
                   ${farm.address}<br/>
                   ${farm.postcode}
                 </p>
                 ${farm.produce_tags && farm.produce_tags.length > 0 ? `
                   <div style="margin-top:12px;">
-                    <span style="font-size:12px; font-weight:500; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Produces:</span>
+                    <span style="font-size:12px; font-weight:500; color:${PuredgeOS.colors.semantic.text.tertiary}; text-transform:uppercase; letter-spacing:0.5px;">Produces:</span>
                     <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:4px;">
                       ${farm.produce_tags.map(tag => 
-                        `<span style="background:#f0f9ff; color:#0369a1; padding:4px 8px; border-radius:12px; font-size:12px; font-weight:500;">${tag}</span>`
+                        `<span style="background:${PuredgeOS.colors.primary[50]}; color:${PuredgeOS.colors.primary[700]}; padding:4px 8px; border-radius:12px; font-size:12px; font-weight:500;">${tag}</span>`
                       ).join('')}
                     </div>
                   </div>
@@ -92,9 +94,11 @@ export default function MapPage() {
             });
           }
         });
-              } catch {
-          setError("Map failed to load");
-        }
+
+        setMapLoaded(true);
+      } catch {
+        setError("Map failed to load");
+      }
     };
 
     initMap();
@@ -113,7 +117,7 @@ export default function MapPage() {
         alignItems: 'center', 
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        fontFamily: PuredgeOS.typography.fontFamily.primary
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -127,15 +131,15 @@ export default function MapPage() {
           }}></div>
           <h1 style={{ 
             margin: 0, 
-            fontSize: '24px', 
-            fontWeight: '600', 
-            color: '#1e293b',
-            marginBottom: '8px'
+            fontSize: PuredgeOS.typography.fontSize['2xl'],
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            color: PuredgeOS.colors.semantic.text.primary,
+            marginBottom: PuredgeOS.spacing[2]
           }}>Loading Farm Map</h1>
           <p style={{ 
             margin: 0, 
-            fontSize: '16px', 
-            color: '#64748b' 
+            fontSize: PuredgeOS.typography.fontSize.base,
+            color: PuredgeOS.colors.semantic.text.secondary
           }}>Preparing your local farm discovery experience</p>
         </div>
         <style jsx>{`
@@ -157,49 +161,40 @@ export default function MapPage() {
         alignItems: 'center', 
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        fontFamily: PuredgeOS.typography.fontFamily.primary
       }}>
-        <div style={{ textAlign: 'center', maxWidth: '400px', padding: '24px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '400px', padding: PuredgeOS.spacing[6] }}>
           <div style={{
             width: '48px',
             height: '48px',
-            background: '#ef4444',
+            background: PuredgeOS.colors.error[500],
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px',
             color: 'white',
-            fontSize: '24px'
+            fontSize: PuredgeOS.typography.fontSize['2xl']
           }}>⚠️</div>
           <h1 style={{ 
             margin: 0, 
-            fontSize: '24px', 
-            fontWeight: '600', 
-            color: '#991b1b',
-            marginBottom: '8px'
+            fontSize: PuredgeOS.typography.fontSize['2xl'],
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            color: PuredgeOS.colors.error[800],
+            marginBottom: PuredgeOS.spacing[2]
           }}>Unable to Load Map</h1>
           <p style={{ 
             margin: 0, 
-            fontSize: '16px', 
-            color: '#7f1d1d',
-            marginBottom: '24px'
+            fontSize: PuredgeOS.typography.fontSize.base,
+            color: PuredgeOS.colors.error[700],
+            marginBottom: PuredgeOS.spacing[6]
           }}>{error}</p>
           <button 
             onClick={() => window.location.reload()}
             style={{
-              background: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'background 0.2s ease'
+              ...PuredgeOSComponents.button.base,
+              ...PuredgeOSComponents.button.primary
             }}
-            onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
-            onMouseOut={(e) => e.currentTarget.style.background = '#3b82f6'}
           >
             Try Again
           </button>
@@ -217,7 +212,7 @@ export default function MapPage() {
         alignItems: 'center', 
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        fontFamily: PuredgeOS.typography.fontFamily.primary
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -231,15 +226,15 @@ export default function MapPage() {
           }}></div>
           <h1 style={{ 
             margin: 0, 
-            fontSize: '24px', 
-            fontWeight: '600', 
-            color: '#0c4a6e',
-            marginBottom: '8px'
+            fontSize: PuredgeOS.typography.fontSize['2xl'],
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            color: PuredgeOS.colors.primary[800],
+            marginBottom: PuredgeOS.spacing[2]
           }}>Discovering Farms</h1>
           <p style={{ 
             margin: 0, 
-            fontSize: '16px', 
-            color: '#0369a1' 
+            fontSize: PuredgeOS.typography.fontSize.base,
+            color: PuredgeOS.colors.primary[700]
           }}>Loading verified farm locations near you</p>
         </div>
         <style jsx>{`
@@ -257,52 +252,51 @@ export default function MapPage() {
     <div style={{ 
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: PuredgeOS.typography.fontFamily.primary
     }}>
       {/* PuredgeOS Clarity: Clear header with purpose */}
       <header style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(20px)',
+        ...PuredgeOSUtils.glass('light'),
         borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-        padding: '20px 24px',
+        padding: `${PuredgeOS.spacing[5]} ${PuredgeOS.spacing[6]}`,
         position: 'sticky',
         top: 0,
-        zIndex: 100
+        zIndex: PuredgeOS.zIndex.sticky
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h1 style={{ 
             margin: 0, 
-            fontSize: '28px', 
-            fontWeight: '700', 
-            color: '#1e293b',
-            marginBottom: '4px'
+            fontSize: PuredgeOS.typography.fontSize['3xl'],
+            fontWeight: PuredgeOS.typography.fontWeight.bold,
+            color: PuredgeOS.colors.semantic.text.primary,
+            marginBottom: PuredgeOS.spacing[1]
           }}>Farm Discovery Map</h1>
           <p style={{ 
             margin: 0, 
-            fontSize: '16px', 
-            color: '#64748b',
-            marginBottom: '16px'
+            fontSize: PuredgeOS.typography.fontSize.base,
+            color: PuredgeOS.colors.semantic.text.secondary,
+            marginBottom: PuredgeOS.spacing[4]
           }}>
             Explore {farms.length} verified farm locations. Click markers for details.
           </p>
           
           {/* PuredgeOS Clarity: Clear action indicators */}
-          <div style={{
-            display: 'flex',
-            gap: '12px',
-            alignItems: 'center',
-            fontSize: '14px',
-            color: '#64748b'
-          }}>
-            <span style={{
-              display: 'inline-flex',
+                      <div style={{
+              display: 'flex',
+              gap: PuredgeOS.spacing[3],
               alignItems: 'center',
-              gap: '6px'
+              fontSize: PuredgeOS.typography.fontSize.sm,
+              color: PuredgeOS.colors.semantic.text.secondary
             }}>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: PuredgeOS.spacing['1.5']
+              }}>
               <div style={{
                 width: '12px',
                 height: '12px',
-                background: '#3b82f6',
+                background: PuredgeOS.colors.primary[500],
                 borderRadius: '50%'
               }}></div>
               Click markers
@@ -310,12 +304,12 @@ export default function MapPage() {
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: PuredgeOS.spacing['1.5']
             }}>
               <div style={{
                 width: '12px',
                 height: '12px',
-                background: '#10b981',
+                background: PuredgeOS.colors.success[500],
                 borderRadius: '50%'
               }}></div>
               Verified farms
@@ -325,11 +319,11 @@ export default function MapPage() {
       </header>
 
       {/* PuredgeOS Immersion: Signature map experience */}
-      <main style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <main style={{ padding: PuredgeOS.spacing[6], maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: selectedFarm ? '1fr 320px' : '1fr',
-          gap: '24px',
+          gap: PuredgeOS.spacing[6],
           height: 'calc(100vh - 200px)'
         }}>
           {/* Map Container */}
@@ -338,63 +332,65 @@ export default function MapPage() {
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: '16px',
+              borderRadius: PuredgeOS.borderRadius['2xl'],
               overflow: 'hidden',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-              border: '1px solid rgba(0, 0, 0, 0.1)'
+              ...PuredgeOSUtils.elevate(4),
+              border: '1px solid rgba(0, 0, 0, 0.1)',
+              opacity: mapLoaded ? 1 : 0,
+              transition: `opacity ${PuredgeOS.motion.duration.slow} ${PuredgeOS.motion.easing.smooth}`
             }}
           />
 
           {/* PuredgeOS Clarity: Farm details panel */}
           {selectedFarm && (
             <div style={{
-              background: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '16px',
-              padding: '24px',
+              ...PuredgeOSUtils.glass('light'),
+              borderRadius: PuredgeOS.borderRadius['2xl'],
+              padding: PuredgeOS.spacing[6],
               border: '1px solid rgba(0, 0, 0, 0.1)',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              ...PuredgeOSUtils.elevate(4),
               height: 'fit-content',
               maxHeight: '100%',
-              overflow: 'auto'
+              overflow: 'auto',
+              animation: 'slideIn 0.3s ease-out'
             }}>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
-                marginBottom: '16px'
+                marginBottom: PuredgeOS.spacing[4]
               }}>
                 <h2 style={{
                   margin: 0,
-                  fontSize: '20px',
-                  fontWeight: '600',
-                  color: '#1e293b'
+                  fontSize: PuredgeOS.typography.fontSize.xl,
+                  fontWeight: PuredgeOS.typography.fontWeight.semibold,
+                  color: PuredgeOS.colors.semantic.text.primary
                 }}>{selectedFarm.name}</h2>
                 <button
                   onClick={() => setSelectedFarm(null)}
                   style={{
                     background: 'none',
                     border: 'none',
-                    fontSize: '20px',
+                    fontSize: PuredgeOS.typography.fontSize.xl,
                     cursor: 'pointer',
-                    color: '#64748b',
-                    padding: '4px',
-                    borderRadius: '4px',
-                    transition: 'background 0.2s ease'
+                    color: PuredgeOS.colors.semantic.text.secondary,
+                    padding: PuredgeOS.spacing[1],
+                    borderRadius: PuredgeOS.borderRadius.base,
+                    transition: `all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth}`
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.background = '#f1f5f9'}
+                  onMouseOver={(e) => e.currentTarget.style.background = PuredgeOS.colors.semantic.background.tertiary}
                   onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                 >
                   ×
                 </button>
               </div>
               
-              <div style={{ marginBottom: '16px' }}>
+              <div style={{ marginBottom: PuredgeOS.spacing[4] }}>
                 <p style={{
                   margin: 0,
-                  fontSize: '14px',
-                  color: '#64748b',
-                  lineHeight: '1.5'
+                  fontSize: PuredgeOS.typography.fontSize.sm,
+                  color: PuredgeOS.colors.semantic.text.secondary,
+                  lineHeight: PuredgeOS.typography.lineHeight.normal
                 }}>
                   {selectedFarm.address}<br/>
                   {selectedFarm.postcode}
@@ -405,25 +401,25 @@ export default function MapPage() {
                 <div>
                   <h3 style={{
                     margin: '0 0 8px 0',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    color: '#374151',
+                    fontSize: PuredgeOS.typography.fontSize.sm,
+                    fontWeight: PuredgeOS.typography.fontWeight.semibold,
+                    color: PuredgeOS.colors.semantic.text.primary,
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
+                    letterSpacing: PuredgeOS.typography.letterSpacing.wide
                   }}>Produces</h3>
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '6px'
-                  }}>
+                                      <div style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: PuredgeOS.spacing['1.5']
+                    }}>
                     {selectedFarm.produce_tags.map((tag, index) => (
                       <span key={index} style={{
-                        background: '#f0f9ff',
-                        color: '#0369a1',
-                        padding: '6px 12px',
-                        borderRadius: '20px',
-                        fontSize: '12px',
-                        fontWeight: '500'
+                        background: PuredgeOS.colors.primary[50],
+                        color: PuredgeOS.colors.primary[700],
+                        padding: `${PuredgeOS.spacing[1.5]} ${PuredgeOS.spacing[3]}`,
+                        borderRadius: PuredgeOS.borderRadius.full,
+                        fontSize: PuredgeOS.typography.fontSize.sm,
+                        fontWeight: PuredgeOS.typography.fontWeight.medium
                       }}>
                         {tag}
                       </span>
@@ -436,51 +432,51 @@ export default function MapPage() {
         </div>
 
         {/* PuredgeOS Clarity: Farm list for context */}
-        <div style={{ marginTop: '24px' }}>
+        <div style={{ marginTop: PuredgeOS.spacing[6] }}>
           <h2 style={{
             margin: '0 0 16px 0',
-            fontSize: '20px',
-            fontWeight: '600',
-            color: '#1e293b'
+            fontSize: PuredgeOS.typography.fontSize.xl,
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            color: PuredgeOS.colors.semantic.text.primary
           }}>All Verified Farms ({farms.length})</h2>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '16px'
+            gap: PuredgeOS.spacing[4]
           }}>
             {farms.map((farm) => (
               <div
                 key={farm.id}
                 onClick={() => setSelectedFarm(farm)}
-                                 style={{
-                   background: 'rgba(255, 255, 255, 0.95)',
-                   backdropFilter: 'blur(20px)',
-                   borderRadius: '12px',
-                   padding: '16px',
-                   border: '1px solid rgba(0, 0, 0, 0.1)',
-                   cursor: 'pointer',
-                   transition: 'all 0.2s ease'
-                 }}
+                style={{
+                  ...PuredgeOSUtils.glass('light'),
+                  borderRadius: PuredgeOS.borderRadius.xl,
+                  padding: PuredgeOS.spacing[4],
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  cursor: 'pointer',
+                  transition: `all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth}`,
+                  animation: 'fadeIn 0.5s ease-out'
+                }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.boxShadow = PuredgeOS.shadows.lg;
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = PuredgeOS.shadows.md;
                 }}
               >
                 <h3 style={{
                   margin: '0 0 8px 0',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: '#1e293b'
+                  fontSize: PuredgeOS.typography.fontSize.base,
+                  fontWeight: PuredgeOS.typography.fontWeight.semibold,
+                  color: PuredgeOS.colors.semantic.text.primary
                 }}>{farm.name}</h3>
                 <p style={{
                   margin: '0 0 12px 0',
-                  fontSize: '14px',
-                  color: '#64748b',
-                  lineHeight: '1.4'
+                  fontSize: PuredgeOS.typography.fontSize.sm,
+                  color: PuredgeOS.colors.semantic.text.secondary,
+                  lineHeight: PuredgeOS.typography.lineHeight.normal
                 }}>
                   {farm.address}, {farm.postcode}
                 </p>
@@ -488,16 +484,16 @@ export default function MapPage() {
                   <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    gap: '4px'
+                    gap: PuredgeOS.spacing[1]
                   }}>
                     {farm.produce_tags.map((tag, index) => (
                       <span key={index} style={{
-                        background: '#f0f9ff',
-                        color: '#0369a1',
-                        padding: '4px 8px',
-                        borderRadius: '12px',
-                        fontSize: '11px',
-                        fontWeight: '500'
+                        background: PuredgeOS.colors.primary[50],
+                        color: PuredgeOS.colors.primary[700],
+                        padding: `${PuredgeOS.spacing[1]} ${PuredgeOS.spacing[2]}`,
+                        borderRadius: PuredgeOS.borderRadius.full,
+                        fontSize: PuredgeOS.typography.fontSize.xs,
+                        fontWeight: PuredgeOS.typography.fontWeight.medium
                       }}>
                         {tag}
                       </span>
@@ -509,6 +505,36 @@ export default function MapPage() {
           </div>
         </div>
       </main>
+
+      {/* PuredgeOS Motion: CSS Animations */}
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
