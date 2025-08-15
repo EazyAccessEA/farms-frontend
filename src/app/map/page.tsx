@@ -109,7 +109,10 @@ export default function MapPage() {
         // Wait for map to load
         map.on('load', () => {
           setMapLoaded(true);
-          addMarkersToMap(farms);
+          // Small delay to ensure map is fully rendered
+          setTimeout(() => {
+            addMarkersToMap(farms);
+          }, 100);
         });
 
         // Handle map errors
@@ -136,13 +139,17 @@ export default function MapPage() {
   const addMarkersToMap = (farmsToShow: Farm[]) => {
     if (!mapRef.current || !mapLoaded) return;
 
+    console.log('Adding markers for farms:', farmsToShow.length);
+    console.log('Map center:', mapRef.current.getCenter());
+    console.log('Map zoom:', mapRef.current.getZoom());
+
     // Remove existing markers
     const existingMarkers = document.querySelectorAll('.farm-marker');
     existingMarkers.forEach(marker => marker.remove());
 
     farmsToShow.forEach((farm) => {
       if (typeof farm.lat === "number" && typeof farm.lng === "number") {
-        // Create marker element
+        // Create marker element with proper positioning
         const markerEl = document.createElement('div');
         markerEl.className = 'farm-marker';
         markerEl.style.cssText = `
@@ -155,6 +162,10 @@ export default function MapPage() {
           cursor: pointer;
           transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
           animation: markerPulse 2s ease-in-out infinite;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
         `;
 
         // Create popup
@@ -203,13 +214,16 @@ export default function MapPage() {
           </div>
         `);
 
-        // Create and add marker
+        // Create and add marker with proper positioning
         new maplibregl.Marker({
-          element: markerEl
+          element: markerEl,
+          anchor: 'center'
         })
           .setLngLat([farm.lng, farm.lat])
           .setPopup(popup)
           .addTo(mapRef.current!);
+          
+        console.log(`Added marker for ${farm.name} at [${farm.lng}, ${farm.lat}]`);
 
         // Marker click handler
         markerEl.addEventListener('click', () => {
