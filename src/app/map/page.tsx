@@ -149,7 +149,7 @@ export default function MapPage() {
 
     farmsToShow.forEach((farm) => {
       if (typeof farm.lat === "number" && typeof farm.lng === "number") {
-        // Create marker element with proper positioning
+        // Create marker element with relative positioning
         const markerEl = document.createElement('div');
         markerEl.className = 'farm-marker';
         markerEl.style.cssText = `
@@ -162,10 +162,6 @@ export default function MapPage() {
           cursor: pointer;
           transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
           animation: markerPulse 2s ease-in-out infinite;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
         `;
 
         // Create popup
@@ -619,9 +615,9 @@ export default function MapPage() {
         }
         
         @keyframes markerBounce {
-          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-          40% { transform: translateY(-10px); }
-          60% { transform: translateY(-5px); }
+          0%, 20%, 50%, 80%, 100% { transform: scale(1); }
+          40% { transform: scale(1.1) translateY(-10px); }
+          60% { transform: scale(1.05) translateY(-5px); }
         }
         
         @keyframes slideInUp {
