@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { PuredgeOS, PuredgeOSComponents, PuredgeOSUtils } from '@/lib/puredgeos';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -69,8 +70,8 @@ export default function MapPage() {
               }
             ]
           },
-          center: [-2.5, 54.5], // UK center
-          zoom: 6,
+          center: [-1.8723, 52.4746], // Center on first farm (Birmingham area)
+          zoom: 10,
           maxZoom: 18,
           minZoom: 3
         });
@@ -84,10 +85,10 @@ export default function MapPage() {
         map.on('load', () => {
           setMapLoaded(true);
           
-                     // Add farm markers with PuredgeOS signature moments
-           farms.forEach((farm) => {
+          // Add farm markers with PuredgeOS signature moments
+          farms.forEach((farm) => {
             if (typeof farm.lat === "number" && typeof farm.lng === "number") {
-              // Create custom marker element
+              // Create custom marker element with proper positioning
               const markerEl = document.createElement('div');
               markerEl.className = 'farm-marker';
               markerEl.style.cssText = `
@@ -100,14 +101,16 @@ export default function MapPage() {
                 cursor: pointer;
                 transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
                 animation: markerPulse 2s ease-in-out infinite;
+                position: relative;
+                transform: translate(-50%, -50%);
               `;
 
               // Add pulse animation
               const style = document.createElement('style');
               style.textContent = `
                 @keyframes markerPulse {
-                  0%, 100% { transform: scale(1); }
-                  50% { transform: scale(1.1); }
+                  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                  50% { transform: translate(-50%, -50%) scale(1.1); }
                 }
               `;
               document.head.appendChild(style);
@@ -138,30 +141,30 @@ export default function MapPage() {
                 </div>
               `);
 
-                             // Create marker with PuredgeOS immersion
-               new maplibregl.Marker({
-                 element: markerEl,
-                 anchor: 'center'
-               })
-                 .setLngLat([farm.lng, farm.lat])
-                 .setPopup(popup)
-                 .addTo(map);
+              // Create marker with proper positioning
+              new maplibregl.Marker({
+                element: markerEl,
+                anchor: 'center'
+              })
+                .setLngLat([farm.lng, farm.lat])
+                .setPopup(popup)
+                .addTo(map);
 
               // PuredgeOS signature moment - marker click animation
               markerEl.addEventListener('click', () => {
                 setSelectedFarm(farm);
                 // Add bounce animation
                 markerEl.style.animation = 'none';
-                                 void markerEl.offsetHeight; // Trigger reflow
+                void markerEl.offsetHeight; // Trigger reflow
                 markerEl.style.animation = 'markerBounce 0.6s ease-out';
                 
                 // Add bounce keyframes
                 const bounceStyle = document.createElement('style');
                 bounceStyle.textContent = `
                   @keyframes markerBounce {
-                    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                    40% { transform: translateY(-10px); }
-                    60% { transform: translateY(-5px); }
+                    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
+                    40% { transform: translate(-50%, -50%) translateY(-10px); }
+                    60% { transform: translate(-50%, -50%) translateY(-5px); }
                   }
                 `;
                 document.head.appendChild(bounceStyle);
@@ -174,12 +177,12 @@ export default function MapPage() {
 
               // Hover effects
               markerEl.addEventListener('mouseenter', () => {
-                markerEl.style.transform = 'scale(1.2)';
+                markerEl.style.transform = 'translate(-50%, -50%) scale(1.2)';
                 markerEl.style.boxShadow = PuredgeOS.shadows.xl;
               });
 
               markerEl.addEventListener('mouseleave', () => {
-                markerEl.style.transform = 'scale(1)';
+                markerEl.style.transform = 'translate(-50%, -50%) scale(1)';
                 markerEl.style.boxShadow = PuredgeOS.shadows.lg;
               });
             }
@@ -198,7 +201,6 @@ export default function MapPage() {
 
     initMap();
 
-    // Cleanup
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -211,433 +213,180 @@ export default function MapPage() {
     setIsClient(true);
   }, []);
 
-  // PuredgeOS Clarity: Clear loading states
-  if (!isClient) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        fontFamily: PuredgeOS.typography.fontFamily.primary
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid #e2e8f0',
-            borderTop: '3px solid #3b82f6',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
-          }}></div>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize['2xl'],
-            fontWeight: PuredgeOS.typography.fontWeight.semibold,
-            color: PuredgeOS.colors.semantic.text.primary,
-            marginBottom: PuredgeOS.spacing[2]
-          }}>Loading Farm Map</h1>
-          <p style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize.base,
-            color: PuredgeOS.colors.semantic.text.secondary
-          }}>Preparing your local farm discovery experience</p>
-        </div>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  // PuredgeOS Clarity: Clear error states
-  if (error) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
-        fontFamily: PuredgeOS.typography.fontFamily.primary
-      }}>
-        <div style={{ textAlign: 'center', maxWidth: '400px', padding: PuredgeOS.spacing[6] }}>
-          <div style={{
-            width: '48px',
-            height: '48px',
-            background: PuredgeOS.colors.error[500],
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 16px',
-            color: 'white',
-            fontSize: PuredgeOS.typography.fontSize['2xl']
-          }}>⚠️</div>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize['2xl'],
-            fontWeight: PuredgeOS.typography.fontWeight.semibold,
-            color: PuredgeOS.colors.error[800],
-            marginBottom: PuredgeOS.spacing[2]
-          }}>Unable to Load Map</h1>
-          <p style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize.base,
-            color: PuredgeOS.colors.error[700],
-            marginBottom: PuredgeOS.spacing[6]
-          }}>{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            style={{
-              ...PuredgeOSComponents.button.base,
-              ...PuredgeOSComponents.button.primary
-            }}
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // PuredgeOS Clarity: Clear loading states
+  // PuredgeOS Clarity: Loading state
   if (loading) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+        background: PuredgeOS.colors.semantic.background.primary,
         fontFamily: PuredgeOS.typography.fontFamily.primary
       }}>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{
+          textAlign: 'center',
+          color: PuredgeOS.colors.semantic.text.primary
+        }}>
           <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid #e0f2fe',
-            borderTop: '3px solid #0ea5e9',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
-          }}></div>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize['2xl'],
+            fontSize: PuredgeOS.typography.fontSize.xl,
             fontWeight: PuredgeOS.typography.fontWeight.semibold,
-            color: PuredgeOS.colors.primary[800],
-            marginBottom: PuredgeOS.spacing[2]
-          }}>Discovering Farms</h1>
-          <p style={{ 
-            margin: 0, 
+            marginBottom: PuredgeOS.spacing[4]
+          }}>
+            Loading Farm Map...
+          </div>
+          <div style={{
             fontSize: PuredgeOS.typography.fontSize.base,
-            color: PuredgeOS.colors.primary[700]
-          }}>Loading verified farm locations near you</p>
+            color: PuredgeOS.colors.semantic.text.secondary
+          }}>
+            Finding local farms near you
+          </div>
         </div>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
       </div>
     );
   }
 
-  // PuredgeOS Main Experience: Clarity + Immersion
-  return (
-    <div style={{ 
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-      fontFamily: PuredgeOS.typography.fontFamily.primary
-    }}>
-      {/* PuredgeOS Clarity: Clear header with purpose */}
-      <header style={{
-        ...PuredgeOSUtils.glass('light'),
-        borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-        padding: `${PuredgeOS.spacing[5]} ${PuredgeOS.spacing[6]}`,
-        position: 'sticky',
-        top: 0,
-        zIndex: PuredgeOS.zIndex.sticky
+  // PuredgeOS Clarity: Error state
+  if (error) {
+    return (
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: PuredgeOS.colors.semantic.background.primary,
+        fontFamily: PuredgeOS.typography.fontFamily.primary
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h1 style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize['3xl'],
-            fontWeight: PuredgeOS.typography.fontWeight.bold,
-            color: PuredgeOS.colors.semantic.text.primary,
-            marginBottom: PuredgeOS.spacing[1]
-          }}>Farm Discovery Map</h1>
-          <p style={{ 
-            margin: 0, 
-            fontSize: PuredgeOS.typography.fontSize.base,
-            color: PuredgeOS.colors.semantic.text.secondary,
-            marginBottom: PuredgeOS.spacing[4]
-          }}>
-            Explore {farms.length} verified farm locations. Click markers for details.
-          </p>
-          
-          {/* PuredgeOS Clarity: Clear action indicators */}
+        <div style={{
+          textAlign: 'center',
+          color: PuredgeOS.colors.semantic.text.primary
+        }}>
           <div style={{
-            display: 'flex',
-            gap: PuredgeOS.spacing[3],
-            alignItems: 'center',
-            fontSize: PuredgeOS.typography.fontSize.sm,
+            fontSize: PuredgeOS.typography.fontSize.xl,
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            marginBottom: PuredgeOS.spacing[4],
+            color: PuredgeOS.colors.error[600]
+          }}>
+            {error}
+          </div>
+          <div style={{
+            fontSize: PuredgeOS.typography.fontSize.base,
             color: PuredgeOS.colors.semantic.text.secondary
           }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: PuredgeOS.spacing['1.5']
-            }}>
-              <div style={{
-                width: '12px',
-                height: '12px',
-                background: PuredgeOS.colors.primary[500],
-                borderRadius: '50%'
-              }}></div>
-              Click markers
-            </span>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: PuredgeOS.spacing['1.5']
-            }}>
-              <div style={{
-                width: '12px',
-                height: '12px',
-                background: PuredgeOS.colors.success[500],
-                borderRadius: '50%'
-              }}></div>
-              Verified farms
-            </span>
+            Please try refreshing the page
           </div>
         </div>
-      </header>
+      </div>
+    );
+  }
 
-      {/* PuredgeOS Immersion: Signature map experience */}
-      <main style={{ padding: PuredgeOS.spacing[6], maxWidth: '1200px', margin: '0 auto' }}>
+  // PuredgeOS Immersion: Main map interface
+  return (
+    <div style={{
+      height: '100vh',
+      background: PuredgeOS.colors.semantic.background.primary,
+      fontFamily: PuredgeOS.typography.fontFamily.primary,
+      position: 'relative'
+    }}>
+      {/* Map container with proper dimensions */}
+      <div 
+        ref={mapElRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          opacity: mapLoaded ? 1 : 0,
+          transition: `opacity ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth}`
+        }}
+      />
+
+      {/* PuredgeOS Clarity: Selected farm info */}
+      {selectedFarm && (
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: selectedFarm ? '1fr 320px' : '1fr',
-          gap: PuredgeOS.spacing[6],
-          height: 'calc(100vh - 200px)'
+          position: 'absolute',
+          top: PuredgeOS.spacing[6],
+          left: PuredgeOS.spacing[6],
+          right: PuredgeOS.spacing[6],
+          maxWidth: '400px',
+          ...PuredgeOSUtils.glass('light'),
+          padding: PuredgeOS.spacing[6],
+          borderRadius: PuredgeOS.borderRadius.lg,
+          border: `1px solid ${PuredgeOS.colors.semantic.border.light}`,
+          boxShadow: PuredgeOS.shadows.lg,
+          zIndex: 1000
         }}>
-          {/* Map Container */}
-          <div
-            ref={mapElRef}
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: PuredgeOS.borderRadius['2xl'],
-              overflow: 'hidden',
-              ...PuredgeOSUtils.elevate(4),
-              border: '1px solid rgba(0, 0, 0, 0.1)',
-              opacity: mapLoaded ? 1 : 0,
-              transition: `opacity ${PuredgeOS.motion.duration.slow} ${PuredgeOS.motion.easing.smooth}`
-            }}
-          />
-
-          {/* PuredgeOS Clarity: Farm details panel */}
-          {selectedFarm && (
+          <h3 style={{
+            fontSize: PuredgeOS.typography.fontSize.lg,
+            fontWeight: PuredgeOS.typography.fontWeight.semibold,
+            color: PuredgeOS.colors.semantic.text.primary,
+            margin: 0,
+            marginBottom: PuredgeOS.spacing[2]
+          }}>
+            {selectedFarm.name}
+          </h3>
+          <p style={{
+            fontSize: PuredgeOS.typography.fontSize.sm,
+            color: PuredgeOS.colors.semantic.text.secondary,
+            margin: 0,
+            marginBottom: PuredgeOS.spacing[3]
+          }}>
+            {selectedFarm.address}, {selectedFarm.postcode}
+          </p>
+          {selectedFarm.produce_tags && selectedFarm.produce_tags.length > 0 && (
             <div style={{
-              ...PuredgeOSUtils.glass('light'),
-              borderRadius: PuredgeOS.borderRadius['2xl'],
-              padding: PuredgeOS.spacing[6],
-              border: '1px solid rgba(0, 0, 0, 0.1)',
-              ...PuredgeOSUtils.elevate(4),
-              height: 'fit-content',
-              maxHeight: '100%',
-              overflow: 'auto',
-              animation: 'slideIn 0.3s ease-out'
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: PuredgeOS.spacing[2]
             }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: PuredgeOS.spacing[4]
-              }}>
-                <h2 style={{
-                  margin: 0,
-                  fontSize: PuredgeOS.typography.fontSize.xl,
-                  fontWeight: PuredgeOS.typography.fontWeight.semibold,
-                  color: PuredgeOS.colors.semantic.text.primary
-                }}>{selectedFarm.name}</h2>
-                <button
-                  onClick={() => setSelectedFarm(null)}
+              {selectedFarm.produce_tags.map((tag, index) => (
+                <span
+                  key={index}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: PuredgeOS.typography.fontSize.xl,
-                    cursor: 'pointer',
-                    color: PuredgeOS.colors.semantic.text.secondary,
-                    padding: PuredgeOS.spacing[1],
-                    borderRadius: PuredgeOS.borderRadius.base,
-                    transition: `all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth}`
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.background = PuredgeOS.colors.semantic.background.tertiary}
-                  onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                >
-                  ×
-                </button>
-              </div>
-              
-              <div style={{ marginBottom: PuredgeOS.spacing[4] }}>
-                <p style={{
-                  margin: 0,
-                  fontSize: PuredgeOS.typography.fontSize.sm,
-                  color: PuredgeOS.colors.semantic.text.secondary,
-                  lineHeight: PuredgeOS.typography.lineHeight.normal
-                }}>
-                  {selectedFarm.address}<br/>
-                  {selectedFarm.postcode}
-                </p>
-              </div>
-
-              {selectedFarm.produce_tags && selectedFarm.produce_tags.length > 0 && (
-                <div>
-                  <h3 style={{
-                    margin: '0 0 8px 0',
+                    background: PuredgeOS.colors.primary[100],
+                    color: PuredgeOS.colors.primary[700],
+                    padding: `${PuredgeOS.spacing[1]} ${PuredgeOS.spacing[2]}`,
+                    borderRadius: PuredgeOS.borderRadius.md,
                     fontSize: PuredgeOS.typography.fontSize.sm,
-                    fontWeight: PuredgeOS.typography.fontWeight.semibold,
-                    color: PuredgeOS.colors.semantic.text.primary,
-                    textTransform: 'uppercase',
-                    letterSpacing: PuredgeOS.typography.letterSpacing.wide
-                  }}>Produces</h3>
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: PuredgeOS.spacing['1.5']
-                  }}>
-                    {selectedFarm.produce_tags.map((tag, index) => (
-                      <span key={index} style={{
-                        background: PuredgeOS.colors.primary[50],
-                        color: PuredgeOS.colors.primary[700],
-                        padding: `${PuredgeOS.spacing[1.5]} ${PuredgeOS.spacing[3]}`,
-                        borderRadius: PuredgeOS.borderRadius.full,
-                        fontSize: PuredgeOS.typography.fontSize.sm,
-                        fontWeight: PuredgeOS.typography.fontWeight.medium
-                      }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+                    fontWeight: PuredgeOS.typography.fontWeight.medium
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           )}
         </div>
+      )}
 
-        {/* PuredgeOS Clarity: Farm list for context */}
-        <div style={{ marginTop: PuredgeOS.spacing[6] }}>
-          <h2 style={{
-            margin: '0 0 16px 0',
-            fontSize: PuredgeOS.typography.fontSize.xl,
-            fontWeight: PuredgeOS.typography.fontWeight.semibold,
-            color: PuredgeOS.colors.semantic.text.primary
-          }}>All Verified Farms ({farms.length})</h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: PuredgeOS.spacing[4]
-          }}>
-            {farms.map((farm) => (
-              <div
-                key={farm.id}
-                onClick={() => setSelectedFarm(farm)}
-                style={{
-                  ...PuredgeOSUtils.glass('light'),
-                  borderRadius: PuredgeOS.borderRadius.xl,
-                  padding: PuredgeOS.spacing[4],
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
-                  cursor: 'pointer',
-                  transition: `all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth}`,
-                  animation: 'fadeIn 0.5s ease-out'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = PuredgeOS.shadows.lg;
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = PuredgeOS.shadows.md;
-                }}
-              >
-                <h3 style={{
-                  margin: '0 0 8px 0',
-                  fontSize: PuredgeOS.typography.fontSize.base,
-                  fontWeight: PuredgeOS.typography.fontWeight.semibold,
-                  color: PuredgeOS.colors.semantic.text.primary
-                }}>{farm.name}</h3>
-                <p style={{
-                  margin: '0 0 12px 0',
-                  fontSize: PuredgeOS.typography.fontSize.sm,
-                  color: PuredgeOS.colors.semantic.text.secondary,
-                  lineHeight: PuredgeOS.typography.lineHeight.normal
-                }}>
-                  {farm.address}, {farm.postcode}
-                </p>
-                {farm.produce_tags && farm.produce_tags.length > 0 && (
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: PuredgeOS.spacing[1]
-                  }}>
-                    {farm.produce_tags.map((tag, index) => (
-                      <span key={index} style={{
-                        background: PuredgeOS.colors.primary[50],
-                        color: PuredgeOS.colors.primary[700],
-                        padding: `${PuredgeOS.spacing[1]} ${PuredgeOS.spacing[2]}`,
-                        borderRadius: PuredgeOS.borderRadius.full,
-                        fontSize: PuredgeOS.typography.fontSize.xs,
-                        fontWeight: PuredgeOS.typography.fontWeight.medium
-                      }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* PuredgeOS Motion: CSS Animations */}
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateX(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+             {/* PuredgeOS Clarity: Back button */}
+       <div style={{
+         position: 'absolute',
+         top: PuredgeOS.spacing[6],
+         right: PuredgeOS.spacing[6],
+         zIndex: 1000
+       }}>
+         <Link
+           href="/"
+           style={{
+             ...PuredgeOSComponents.button.base,
+             ...PuredgeOSComponents.button.primary,
+             fontSize: PuredgeOS.typography.fontSize.base,
+             padding: `${PuredgeOS.spacing[3]} ${PuredgeOS.spacing[4]}`,
+             textDecoration: 'none',
+             display: 'inline-flex',
+             alignItems: 'center',
+             gap: PuredgeOS.spacing[2],
+             background: PuredgeOS.colors.semantic.background.primary,
+             color: PuredgeOS.colors.semantic.text.primary,
+             border: `1px solid ${PuredgeOS.colors.semantic.border.light}`,
+             boxShadow: PuredgeOS.shadows.sm
+           }}
+         >
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+             <path d="M19 12H5M12 19l-7-7 7-7"/>
+           </svg>
+           Back
+         </Link>
+       </div>
     </div>
   );
 }
