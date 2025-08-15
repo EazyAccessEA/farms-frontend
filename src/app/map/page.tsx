@@ -27,6 +27,8 @@ export default function MapPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredFarms, setFilteredFarms] = useState<Farm[]>([]);
   const [performanceMetrics, setPerformanceMetrics] = useState({
     loadTime: 0,
     markerCount: 0,
@@ -41,6 +43,7 @@ export default function MapPage() {
       .then((r) => r.json())
       .then((data) => {
         setFarms(data);
+        setFilteredFarms(data);
         setLoading(false);
         // PuredgeOS 2.0: Performance benchmarking
         setPerformanceMetrics(prev => ({
@@ -67,6 +70,179 @@ export default function MapPage() {
     // Measure after map is fully loaded
     setTimeout(measureMetrics, 3000);
   }, []);
+
+  // PuredgeOS 2.0: Search and filter functionality
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredFarms(farms);
+      return;
+    }
+
+    const filtered = farms.filter(farm => 
+      farm.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      farm.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      farm.postcode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      farm.produce_tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+    
+    setFilteredFarms(filtered);
+    
+    // PuredgeOS 2.0: Update map markers based on filtered results
+    if (mapRef.current && mapLoaded) {
+      // Remove existing markers
+      const existingMarkers = document.querySelectorAll('.farm-marker');
+      existingMarkers.forEach(marker => marker.remove());
+      
+      // Add filtered markers
+      addMarkersToMap(filtered);
+    }
+  }, [searchQuery, farms, mapLoaded]);
+
+  // PuredgeOS 2.0: Add markers to map with enhanced functionality
+  const addMarkersToMap = (farmsToShow: Farm[]) => {
+    if (!mapRef.current) return;
+
+    farmsToShow.forEach((farm) => {
+      if (typeof farm.lat === "number" && typeof farm.lng === "number") {
+        // PuredgeOS 2.0: Create custom marker element with Fitts' Law compliance
+        const markerEl = document.createElement('div');
+        markerEl.className = 'farm-marker';
+        markerEl.style.cssText = `
+          width: 32px;
+          height: 32px;
+          background: linear-gradient(135deg, ${PuredgeOS.colors.primary[500]} 0%, ${PuredgeOS.colors.primary[600]} 100%);
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: ${PuredgeOS.shadows.lg};
+          cursor: pointer;
+          transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
+          animation: markerPulse 2s ease-in-out infinite;
+          position: relative;
+          transform: translate(-50%, -50%);
+          min-width: 32px;
+          min-height: 32px;
+        `;
+
+        // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes markerPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+          }
+        `;
+        document.head.appendChild(style);
+
+        // PuredgeOS 2.0: Create enhanced popup with cognitive accessibility
+        const popup = new maplibregl.Popup({
+          closeButton: true,
+          closeOnClick: false,
+          maxWidth: '350px',
+          className: 'farm-popup',
+          // PuredgeOS 2.0: WCAG 3.0 compliance
+          anchor: 'bottom'
+        }).setHTML(`
+          <div style="font-family: ${PuredgeOS.typography.fontFamily.primary}; padding: 16px; min-width: 280px;">
+            <h3 style="margin:0 0 12px 0; font-size:20px; font-weight:600; color:${PuredgeOS.colors.semantic.text.primary}; line-height:1.3;">${farm.name}</h3>
+            <p style="margin:0 0 16px 0; font-size:15px; color:${PuredgeOS.colors.semantic.text.secondary}; line-height:1.4;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="display:inline; margin-right:6px; vertical-align:middle;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              ${farm.address}<br/>
+              ${farm.postcode}
+            </p>
+            ${farm.produce_tags && farm.produce_tags.length > 0 ? `
+              <div style="margin-top:16px;">
+                <span style="font-size:13px; font-weight:500; color:${PuredgeOS.colors.semantic.text.tertiary}; text-transform:uppercase; letter-spacing:0.5px;">Available Produce:</span>
+                <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
+                  ${farm.produce_tags.map(tag => 
+                    `<span style="background:${PuredgeOS.colors.primary[50]}; color:${PuredgeOS.colors.primary[700]}; padding:6px 10px; border-radius:16px; font-size:13px; font-weight:500;">${tag}</span>`
+                  ).join('')}
+                </div>
+              </div>
+            ` : ''}
+            <div style="margin-top:16px; padding-top:12px; border-top:1px solid ${PuredgeOS.colors.semantic.border.light};">
+              <button onclick="window.open('https://maps.google.com/?q=${farm.lat},${farm.lng}', '_blank')" style="
+                background: ${PuredgeOS.colors.primary[500]};
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              " onmouseover="this.style.background='${PuredgeOS.colors.primary[600]}'" onmouseout="this.style.background='${PuredgeOS.colors.primary[500]}'">
+                Get Directions
+              </button>
+            </div>
+          </div>
+        `);
+
+        // PuredgeOS 2.0: Create marker with proper positioning and accessibility
+        new maplibregl.Marker({
+          element: markerEl,
+          anchor: 'center'
+        })
+          .setLngLat([farm.lng, farm.lat])
+          .setPopup(popup)
+          .addTo(mapRef.current!);
+
+        // PuredgeOS 2.0: Signature moment - marker click animation with haptic feedback
+        markerEl.addEventListener('click', () => {
+          setSelectedFarm(farm);
+          setPerformanceMetrics(prev => ({
+            ...prev,
+            interactionCount: prev.interactionCount + 1
+          }));
+          
+          // PuredgeOS 2.0: Micro-animation outcome preview
+          markerEl.style.animation = 'none';
+          void markerEl.offsetHeight; // Trigger reflow
+          markerEl.style.animation = 'markerBounce 0.6s ease-out';
+          
+          // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
+          const bounceStyle = document.createElement('style');
+          bounceStyle.textContent = `
+            @keyframes markerBounce {
+              0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
+              40% { transform: translate(-50%, -50%) translateY(-10px); }
+              60% { transform: translate(-50%, -50%) translateY(-5px); }
+            }
+          `;
+          document.head.appendChild(bounceStyle);
+          
+          // PuredgeOS 2.0: Zeigarnik Resolution - Open loops closed within 3 interactions
+          setTimeout(() => {
+            markerEl.style.animation = 'markerPulse 2s ease-in-out infinite';
+          }, 600);
+        });
+
+        // PuredgeOS 2.0: Hover effects with magnetic cursor gravity
+        markerEl.addEventListener('mouseenter', () => {
+          markerEl.style.transform = 'translate(-50%, -50%) scale(1.2)';
+          markerEl.style.boxShadow = PuredgeOS.shadows.xl;
+        });
+
+        markerEl.addEventListener('mouseleave', () => {
+          markerEl.style.transform = 'translate(-50%, -50%) scale(1)';
+          markerEl.style.boxShadow = PuredgeOS.shadows.lg;
+        });
+
+        // PuredgeOS 2.0: Keyboard accessibility
+        markerEl.setAttribute('tabindex', '0');
+        markerEl.setAttribute('role', 'button');
+        markerEl.setAttribute('aria-label', `View details for ${farm.name}`);
+        markerEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            markerEl.click();
+          }
+        });
+      }
+    });
+  };
 
   // PuredgeOS 2.0: Initialize MapLibre map with automatic quality gates
   useEffect(() => {
@@ -128,128 +304,8 @@ export default function MapPage() {
             console.warn('PuredgeOS 2.0: Map load time exceeds LCP threshold');
           }
           
-                     // PuredgeOS 2.0: Add farm markers with cognitive load optimization
-           farms.forEach((farm) => {
-            if (typeof farm.lat === "number" && typeof farm.lng === "number") {
-              // PuredgeOS 2.0: Create custom marker element with Fitts' Law compliance
-              const markerEl = document.createElement('div');
-              markerEl.className = 'farm-marker';
-              markerEl.style.cssText = `
-                width: 32px;
-                height: 32px;
-                background: linear-gradient(135deg, ${PuredgeOS.colors.primary[500]} 0%, ${PuredgeOS.colors.primary[600]} 100%);
-                border: 3px solid white;
-                border-radius: 50%;
-                box-shadow: ${PuredgeOS.shadows.lg};
-                cursor: pointer;
-                transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
-                animation: markerPulse 2s ease-in-out infinite;
-                position: relative;
-                transform: translate(-50%, -50%);
-                min-width: 32px;
-                min-height: 32px;
-              `;
-
-              // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
-              const style = document.createElement('style');
-              style.textContent = `
-                @keyframes markerPulse {
-                  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-                  50% { transform: translate(-50%, -50%) scale(1.1); }
-                }
-              `;
-              document.head.appendChild(style);
-
-              // PuredgeOS 2.0: Create popup with cognitive accessibility
-              const popup = new maplibregl.Popup({
-                closeButton: true,
-                closeOnClick: false,
-                maxWidth: '300px',
-                className: 'farm-popup',
-                // PuredgeOS 2.0: WCAG 3.0 compliance
-                anchor: 'bottom'
-              }).setHTML(`
-                <div style="font-family: ${PuredgeOS.typography.fontFamily.primary}; padding: 12px; min-width: 200px;">
-                  <h3 style="margin:0 0 8px 0; font-size:18px; font-weight:600; color:${PuredgeOS.colors.semantic.text.primary}; line-height:1.3;">${farm.name}</h3>
-                  <p style="margin:0 0 12px 0; font-size:14px; color:${PuredgeOS.colors.semantic.text.secondary}; line-height:1.4;">
-                    ${farm.address}<br/>
-                    ${farm.postcode}
-                  </p>
-                  ${farm.produce_tags && farm.produce_tags.length > 0 ? `
-                    <div style="margin-top:12px;">
-                      <span style="font-size:12px; font-weight:500; color:${PuredgeOS.colors.semantic.text.tertiary}; text-transform:uppercase; letter-spacing:0.5px;">Produces:</span>
-                      <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:4px;">
-                        ${farm.produce_tags.map(tag => 
-                          `<span style="background:${PuredgeOS.colors.primary[50]}; color:${PuredgeOS.colors.primary[700]}; padding:4px 8px; border-radius:12px; font-size:12px; font-weight:500;">${tag}</span>`
-                        ).join('')}
-                      </div>
-                    </div>
-                  ` : ''}
-                </div>
-              `);
-
-              // PuredgeOS 2.0: Create marker with proper positioning and accessibility
-              new maplibregl.Marker({
-                element: markerEl,
-                anchor: 'center'
-              })
-                .setLngLat([farm.lng, farm.lat])
-                .setPopup(popup)
-                .addTo(map);
-
-              // PuredgeOS 2.0: Signature moment - marker click animation with haptic feedback
-              markerEl.addEventListener('click', () => {
-                setSelectedFarm(farm);
-                setPerformanceMetrics(prev => ({
-                  ...prev,
-                  interactionCount: prev.interactionCount + 1
-                }));
-                
-                // PuredgeOS 2.0: Micro-animation outcome preview
-                markerEl.style.animation = 'none';
-                void markerEl.offsetHeight; // Trigger reflow
-                markerEl.style.animation = 'markerBounce 0.6s ease-out';
-                
-                // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
-                const bounceStyle = document.createElement('style');
-                bounceStyle.textContent = `
-                  @keyframes markerBounce {
-                    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
-                    40% { transform: translate(-50%, -50%) translateY(-10px); }
-                    60% { transform: translate(-50%, -50%) translateY(-5px); }
-                  }
-                `;
-                document.head.appendChild(bounceStyle);
-                
-                // PuredgeOS 2.0: Zeigarnik Resolution - Open loops closed within 3 interactions
-                setTimeout(() => {
-                  markerEl.style.animation = 'markerPulse 2s ease-in-out infinite';
-                }, 600);
-              });
-
-              // PuredgeOS 2.0: Hover effects with magnetic cursor gravity
-              markerEl.addEventListener('mouseenter', () => {
-                markerEl.style.transform = 'translate(-50%, -50%) scale(1.2)';
-                markerEl.style.boxShadow = PuredgeOS.shadows.xl;
-              });
-
-              markerEl.addEventListener('mouseleave', () => {
-                markerEl.style.transform = 'translate(-50%, -50%) scale(1)';
-                markerEl.style.boxShadow = PuredgeOS.shadows.lg;
-              });
-
-              // PuredgeOS 2.0: Keyboard accessibility
-              markerEl.setAttribute('tabindex', '0');
-              markerEl.setAttribute('role', 'button');
-              markerEl.setAttribute('aria-label', `View details for ${farm.name}`);
-              markerEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  markerEl.click();
-                }
-              });
-            }
-          });
+          // PuredgeOS 2.0: Add farm markers with cognitive load optimization
+          addMarkersToMap(farms);
         });
 
         // PuredgeOS 2.0: Handle map errors with graceful degradation
@@ -397,6 +453,77 @@ export default function MapPage() {
       fontFamily: PuredgeOS.typography.fontFamily.primary,
       position: 'relative'
     }}>
+      {/* PuredgeOS 2.0: Search and filter interface */}
+      <div style={{
+        position: 'absolute',
+        top: PuredgeOS.spacing[6],
+        left: PuredgeOS.spacing[6],
+        right: PuredgeOS.spacing[6],
+        zIndex: 1000,
+        maxWidth: '500px'
+      }}>
+        <div style={{
+          ...PuredgeOSUtils.glass('light'),
+          padding: PuredgeOS.spacing[4],
+          borderRadius: PuredgeOS.borderRadius.lg,
+          border: `1px solid ${PuredgeOS.colors.semantic.border.light}`,
+          boxShadow: PuredgeOS.shadows.lg
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: PuredgeOS.spacing[3]
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: PuredgeOS.colors.semantic.text.secondary }}>
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search farms, produce, or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                flex: 1,
+                border: 'none',
+                background: 'transparent',
+                fontSize: PuredgeOS.typography.fontSize.base,
+                color: PuredgeOS.colors.semantic.text.primary,
+                outline: 'none',
+                minHeight: '40px'
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: PuredgeOS.spacing[2],
+                  borderRadius: PuredgeOS.borderRadius.base,
+                  color: PuredgeOS.colors.semantic.text.secondary
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            )}
+          </div>
+          {searchQuery && (
+            <div style={{
+              marginTop: PuredgeOS.spacing[3],
+              fontSize: PuredgeOS.typography.fontSize.sm,
+              color: PuredgeOS.colors.semantic.text.secondary
+            }}>
+              Found {filteredFarms.length} farm{filteredFarms.length !== 1 ? 's' : ''}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* PuredgeOS 2.0: Map container with performance optimization */}
       <div 
         ref={mapElRef}
@@ -412,17 +539,17 @@ export default function MapPage() {
       {selectedFarm && (
         <div style={{
           position: 'absolute',
-          top: PuredgeOS.spacing[6],
+          bottom: PuredgeOS.spacing[6],
           left: PuredgeOS.spacing[6],
           right: PuredgeOS.spacing[6],
-          maxWidth: '400px',
+          maxWidth: '500px',
           ...PuredgeOSUtils.glass('light'),
           padding: PuredgeOS.spacing[6],
           borderRadius: PuredgeOS.borderRadius.lg,
           border: `1px solid ${PuredgeOS.colors.semantic.border.light}`,
           boxShadow: PuredgeOS.shadows.lg,
           zIndex: 1000,
-          animation: 'slideIn 0.3s ease-out'
+          animation: 'slideInUp 0.3s ease-out'
         }}>
           <div style={{
             display: 'flex',
@@ -475,7 +602,8 @@ export default function MapPage() {
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: PuredgeOS.spacing[2]
+              gap: PuredgeOS.spacing[2],
+              marginBottom: PuredgeOS.spacing[4]
             }}>
               {selectedFarm.produce_tags.map((tag, index) => (
                 <span
@@ -494,6 +622,50 @@ export default function MapPage() {
               ))}
             </div>
           )}
+          <div style={{
+            display: 'flex',
+            gap: PuredgeOS.spacing[3]
+          }}>
+            <button
+              onClick={() => window.open(`https://maps.google.com/?q=${selectedFarm.lat},${selectedFarm.lng}`, '_blank')}
+              style={{
+                ...PuredgeOSComponents.button.base,
+                ...PuredgeOSComponents.button.primary,
+                fontSize: PuredgeOS.typography.fontSize.sm,
+                padding: `${PuredgeOS.spacing[2]} ${PuredgeOS.spacing[4]}`,
+                minHeight: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: PuredgeOS.spacing[2]
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              Get Directions
+            </button>
+            <button
+              onClick={() => window.open(`tel:+44${selectedFarm.postcode.replace(/\s/g, '')}`, '_blank')}
+              style={{
+                ...PuredgeOSComponents.button.base,
+                fontSize: PuredgeOS.typography.fontSize.sm,
+                padding: `${PuredgeOS.spacing[2]} ${PuredgeOS.spacing[4]}`,
+                minHeight: '40px',
+                background: PuredgeOS.colors.semantic.background.secondary,
+                color: PuredgeOS.colors.semantic.text.primary,
+                border: `1px solid ${PuredgeOS.colors.semantic.border.light}`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: PuredgeOS.spacing[2]
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              Call Farm
+            </button>
+          </div>
         </div>
       )}
 
@@ -539,7 +711,7 @@ export default function MapPage() {
         <div style={{
           position: 'absolute',
           bottom: PuredgeOS.spacing[6],
-          left: PuredgeOS.spacing[6],
+          right: PuredgeOS.spacing[6],
           background: 'rgba(0,0,0,0.8)',
           color: 'white',
           padding: PuredgeOS.spacing[3],
@@ -551,19 +723,20 @@ export default function MapPage() {
           <div>Load: {performanceMetrics.loadTime.toFixed(0)}ms</div>
           <div>Markers: {performanceMetrics.markerCount}</div>
           <div>Interactions: {performanceMetrics.interactionCount}</div>
+          <div>Filtered: {filteredFarms.length}</div>
         </div>
       )}
 
       {/* PuredgeOS 2.0: CSS Animations with performance optimization */}
       <style jsx>{`
-        @keyframes slideIn {
+        @keyframes slideInUp {
           from {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
           }
         }
       `}</style>
