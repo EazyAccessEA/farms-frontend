@@ -82,7 +82,11 @@ class PuredgeTelemetry {
   }
 
   private detectPrivacyMode(): 'full' | 'clarity-only' | 'off' {
-    // Check for privacy preferences
+    // Check for privacy preferences (client-side only)
+    if (typeof window === 'undefined') {
+      return 'clarity-only'; // Default for SSR
+    }
+    
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasConsent = this.getConsentStatus();
     
@@ -93,6 +97,9 @@ class PuredgeTelemetry {
 
   private getConsentStatus(): boolean {
     // Check for user consent (GDPR/UK GDPR compliant)
+    if (typeof window === 'undefined') {
+      return false; // Default for SSR
+    }
     const consent = localStorage.getItem('puredge-consent');
     return consent === 'granted';
   }
@@ -126,6 +133,12 @@ class PuredgeTelemetry {
   // Initialize telemetry system
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
+    
+    // Only initialize on client-side
+    if (typeof window === 'undefined') {
+      this.isInitialized = true;
+      return;
+    }
 
     // Set up performance monitoring
     this.setupPerformanceMonitoring();
@@ -147,7 +160,7 @@ class PuredgeTelemetry {
 
   private setupPerformanceMonitoring(): void {
     // Monitor Core Web Vitals
-    if ('PerformanceObserver' in window) {
+    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
       // LCP monitoring
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
@@ -175,6 +188,9 @@ class PuredgeTelemetry {
   }
 
   private setupAccessibilityMonitoring(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Monitor focus order
     document.addEventListener('focusin', (event) => {
       this.checkFocusOrder(event.target as HTMLElement);
@@ -188,6 +204,9 @@ class PuredgeTelemetry {
   }
 
   private setupClarityMonitoring(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Monitor time to first action
     let firstActionTime: number | null = null;
     
@@ -206,6 +225,9 @@ class PuredgeTelemetry {
   }
 
   private setupImmersionMonitoring(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Monitor "wow" moments (signature interactions)
     this.monitorSignatureMoments();
     
@@ -233,6 +255,9 @@ class PuredgeTelemetry {
   }
 
   private checkContrastRatios(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Simplified contrast checking (in production, use a proper contrast library)
     const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div');
     let minContrast = 4.5;
@@ -259,6 +284,9 @@ class PuredgeTelemetry {
   }
 
   private checkTargetSizes(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     const interactiveElements = document.querySelectorAll('button, a, input, select, textarea');
     const minSize = this.config.a11y.target_size_px;
     
@@ -276,6 +304,9 @@ class PuredgeTelemetry {
   }
 
   private analyzeReadingGradeLevel(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     const textContent = document.body.textContent || '';
     const sentences = textContent.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const words = textContent.split(/\s+/).filter(w => w.length > 0);
@@ -296,6 +327,9 @@ class PuredgeTelemetry {
   }
 
   private setupErrorMonitoring(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     let errorCount = 0;
     let totalActions = 0;
     
@@ -312,6 +346,9 @@ class PuredgeTelemetry {
   }
 
   private monitorSignatureMoments(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Monitor engagement with signature moments
     const signatureElements = document.querySelectorAll('[data-signature-moment]');
     
@@ -332,6 +369,9 @@ class PuredgeTelemetry {
   }
 
   private monitorSessionDuration(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     const startTime = Date.now();
     
     window.addEventListener('beforeunload', () => {
@@ -341,6 +381,9 @@ class PuredgeTelemetry {
   }
 
   private monitorSocialSharing(): void {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Monitor share button clicks
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
@@ -391,6 +434,9 @@ class PuredgeTelemetry {
   }
 
   private recordEvent(eventType: string, props: Record<string, any>): void {
+    // Only record events on client-side
+    if (typeof window === 'undefined') return;
+    
     const event: PuredgeTelemetryEvent = {
       event: eventType,
       timestamp: Date.now(),
@@ -441,6 +487,9 @@ class PuredgeTelemetry {
 
   private getMotionPrefRespected(): boolean {
     // Check if motion preferences are respected
+    if (typeof window === 'undefined') {
+      return true; // Default for SSR
+    }
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
@@ -486,6 +535,8 @@ class PuredgeTelemetry {
 
   // Consent management
   setConsent(granted: boolean): void {
+    if (typeof window === 'undefined') return;
+    
     localStorage.setItem('puredge-consent', granted ? 'granted' : 'denied');
     this.privacyMode = granted ? 'full' : 'clarity-only';
     
@@ -497,7 +548,9 @@ class PuredgeTelemetry {
   // Kill switch
   disableImmersion(): void {
     this.privacyMode = 'clarity-only';
-    console.log('PuredgeOS Immersion disabled - Clarity-only mode active');
+    if (typeof window !== 'undefined') {
+      console.log('PuredgeOS Immersion disabled - Clarity-only mode active');
+    }
   }
 
   // Get current status
