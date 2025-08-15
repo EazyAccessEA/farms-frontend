@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { PuredgeOS, PuredgeOSComponents } from '@/lib/puredgeos';
+import { puredgeTelemetry } from '@/lib/puredge-telemetry';
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,6 +26,19 @@ export default function Home() {
       .then((r) => r.json())
       .then((data) => setFarms(data))
       .catch(() => setFarms([]));
+    
+    // PuredgeOS 2.0: Measure all metrics after page load
+    const measureMetrics = async () => {
+      try {
+        const metrics = await puredgeTelemetry.measureAll('/');
+        console.log('PuredgeOS 2.0 Metrics:', metrics);
+      } catch (error) {
+        console.warn('PuredgeOS 2.0: Failed to measure metrics:', error);
+      }
+    };
+    
+    // Measure after page is fully loaded
+    setTimeout(measureMetrics, 2000);
   }, []);
 
   return (

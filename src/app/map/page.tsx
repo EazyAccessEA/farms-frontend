@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { PuredgeOS, PuredgeOSComponents, PuredgeOSUtils } from '@/lib/puredgeos';
+import { puredgeTelemetry } from '@/lib/puredge-telemetry';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -52,6 +53,19 @@ export default function MapPage() {
         setError("Unable to load farm locations");
         setLoading(false);
       });
+    
+    // PuredgeOS 2.0: Measure all metrics after map loads
+    const measureMetrics = async () => {
+      try {
+        const metrics = await puredgeTelemetry.measureAll('/map');
+        console.log('PuredgeOS 2.0 Map Metrics:', metrics);
+      } catch (error) {
+        console.warn('PuredgeOS 2.0: Failed to measure map metrics:', error);
+      }
+    };
+    
+    // Measure after map is fully loaded
+    setTimeout(measureMetrics, 3000);
   }, []);
 
   // PuredgeOS 2.0: Initialize MapLibre map with automatic quality gates

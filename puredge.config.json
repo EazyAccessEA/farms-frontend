@@ -1,0 +1,74 @@
+{
+  "budgets": {
+    "lcp_ms": 1800,
+    "inp_ms": 200,
+    "bundle_kb_max": 180,
+    "cls_max": 0.1,
+    "fid_ms": 100
+  },
+  "a11y": {
+    "min_contrast": 4.5,
+    "target_size_px": 48,
+    "focus_order_valid": true,
+    "skip_links": true,
+    "aria_live_updates": true
+  },
+  "experiments": {
+    "platform": "vercel",
+    "guardrail": ["lcp_ms", "error_rate", "a11y_score"],
+    "ramp_percentage": 5,
+    "auto_rollback": true
+  },
+  "sensors": {
+    "emotion": "off_by_default",
+    "eye_tracking": "disabled",
+    "biometrics": "disabled",
+    "privacy_mode": "strict"
+  },
+  "kill_switch": {
+    "flag": "puredge:disable-immersion",
+    "fallback_mode": "clarity_only"
+  },
+  "profiles": {
+    "low": {
+      "bundle_kb_max": 120,
+      "lcp_ms": 2500,
+      "motion_enabled": false,
+      "audio_enabled": false,
+      "haptics_enabled": false
+    },
+    "standard": {
+      "bundle_kb_max": 180,
+      "lcp_ms": 2000,
+      "motion_enabled": true,
+      "audio_enabled": false,
+      "haptics_enabled": false
+    },
+    "pro": {
+      "bundle_kb_max": 220,
+      "lcp_ms": 1600,
+      "motion_enabled": true,
+      "audio_enabled": true,
+      "haptics_enabled": true
+    }
+  },
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "/api/puredge/telemetry",
+    "sampling_rate": 0.1,
+    "retention_days": 30,
+    "pseudonymous": true
+  },
+  "gates": {
+    "clarity": {
+      "blink_test_ms": 400,
+      "cognitive_load_max": 3.2,
+      "error_rate_max": 0.02
+    },
+    "immersion": {
+      "wow_moment_rate_min": 0.6,
+      "emotional_engagement_min": 0.8,
+      "conversion_lift_min": 0.15
+    }
+  }
+}
