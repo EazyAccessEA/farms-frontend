@@ -2,51 +2,41 @@
   "budgets": {
     "lcp_ms": 1800,
     "inp_ms": 200,
-    "bundle_kb_max": 180,
-    "cls_max": 0.1,
-    "fid_ms": 100
+    "bundle_kb_max": 180
   },
   "a11y": {
     "min_contrast": 4.5,
-    "target_size_px": 48,
-    "focus_order_valid": true,
-    "skip_links": true,
-    "aria_live_updates": true
+    "target_size_px": 48
   },
   "experiments": {
-    "platform": "vercel",
-    "guardrail": ["lcp_ms", "error_rate", "a11y_score"],
-    "ramp_percentage": 5,
-    "auto_rollback": true
+    "platform": "growthbook",
+    "guardrail": ["lcp_ms", "error_rate"]
   },
   "sensors": {
-    "emotion": "off_by_default",
-    "eye_tracking": "disabled",
-    "biometrics": "disabled",
-    "privacy_mode": "strict"
+    "emotion": "off_by_default"
   },
   "kill_switch": {
-    "flag": "puredge:disable-immersion",
-    "fallback_mode": "clarity_only"
+    "flag": "puredge:disable-immersion"
   },
-  "profiles": {
+  "profiles": ["low", "standard", "pro"],
+  "capability_profiles": {
     "low": {
       "bundle_kb_max": 120,
-      "lcp_ms": 2500,
+      "lcp_p95_ms": 2500,
       "motion_enabled": false,
       "audio_enabled": false,
       "haptics_enabled": false
     },
     "standard": {
       "bundle_kb_max": 180,
-      "lcp_ms": 2000,
+      "lcp_p95_ms": 2000,
       "motion_enabled": true,
-      "audio_enabled": false,
+      "audio_enabled": true,
       "haptics_enabled": false
     },
     "pro": {
       "bundle_kb_max": 220,
-      "lcp_ms": 1600,
+      "lcp_p95_ms": 1600,
       "motion_enabled": true,
       "audio_enabled": true,
       "haptics_enabled": true
@@ -55,20 +45,85 @@
   "telemetry": {
     "enabled": true,
     "endpoint": "/api/puredge/telemetry",
-    "sampling_rate": 0.1,
+    "privacy_mode": "clarity-only",
     "retention_days": 30,
-    "pseudonymous": true
+    "consent_required": true
   },
-  "gates": {
-    "clarity": {
-      "blink_test_ms": 400,
-      "cognitive_load_max": 3.2,
-      "error_rate_max": 0.02
+  "accessibility": {
+    "wcag_level": "AA",
+    "focus_visible": true,
+    "skip_links": true,
+    "landmarks": true,
+    "reduced_motion": true,
+    "high_contrast": true,
+    "screen_reader": true
+  },
+  "performance": {
+    "core_web_vitals": {
+      "lcp_threshold": 1800,
+      "inp_threshold": 200,
+      "cls_threshold": 0.1
     },
-    "immersion": {
-      "wow_moment_rate_min": 0.6,
-      "emotional_engagement_min": 0.8,
-      "conversion_lift_min": 0.15
+    "animation_budget": {
+      "fps_target": 60,
+      "frame_budget_ms": 16
+    },
+    "bundle_analysis": {
+      "max_size_kb": 180,
+      "chunk_limit": 5
     }
+  },
+  "design_tokens": {
+    "enforced": true,
+    "linting": true,
+    "validation": true,
+    "sources": [
+      "src/lib/puredgeos-design-system.ts",
+      "src/app/globals.css"
+    ]
+  },
+  "experimentation": {
+    "enabled": true,
+    "platform": "growthbook",
+    "guardrails": {
+      "performance": ["lcp_ms", "inp_ms", "cls"],
+      "accessibility": ["contrast_ratio", "focus_order"],
+      "clarity": ["error_rate", "task_success"]
+    },
+    "rollback": {
+      "auto": true,
+      "threshold": 0.05,
+      "timeout_ms": 300000
+    }
+  },
+  "internationalization": {
+    "enabled": true,
+    "rtl_support": true,
+    "locale_aware": true,
+    "fallback": "en-US"
+  },
+  "security": {
+    "csp_enabled": true,
+    "artifact_signing": true,
+    "dependency_pinning": true,
+    "sbom_generation": true
+  },
+  "monitoring": {
+    "real_user_monitoring": true,
+    "synthetic_monitoring": true,
+    "error_tracking": true,
+    "performance_monitoring": true
+  },
+  "compliance": {
+    "gdpr": true,
+    "ccpa": true,
+    "wcag_2_2": true,
+    "section_508": true
+  },
+  "deployment": {
+    "phased_rollout": true,
+    "feature_flags": true,
+    "rollback_strategy": "immediate",
+    "health_checks": true
   }
 }
