@@ -30,7 +30,7 @@ export default function PuredgePrivacyControls() {
 
   const handlePrivacyChange = (mode: 'strict' | 'standard' | 'permissive') => {
     setPrivacyMode(mode);
-    puredgeTelemetry.setPrivacyMode(mode);
+    puredgeTelemetry.setConsent(mode !== 'strict');
     if (typeof window !== 'undefined') {
       localStorage.setItem('puredge:privacy-mode', mode);
     }

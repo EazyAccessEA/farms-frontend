@@ -312,9 +312,9 @@ export const HoverRevealFarmCard: React.FC<{
     <div 
       ref={magneticRef.ref}
       className={`card relative overflow-hidden group ${className}`}
+      {...magneticRef.handlers}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      {...magneticRef.handlers}
       style={{
         transform: magneticRef.isHovering 
           ? `translate(${magneticRef.position.x * 0.5}px, ${magneticRef.position.y * 0.5}px)`

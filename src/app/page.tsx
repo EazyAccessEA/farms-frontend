@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { puredgeTelemetry } from '@/lib/puredge-telemetry';
 import Link from 'next/link';
 import { HeroAnimation, InteractiveBackground } from '@/components/HeroAnimation';
-import { EnhancedFarmCardGrid, HoverRevealFarmCard } from '@/components/EnhancedFarmCard';
+import { EnhancedFarmCardGrid } from '@/components/EnhancedFarmCard';
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -73,7 +73,7 @@ export default function Home() {
               Why <span className="text-gradient-primary">Farm Companion</span>?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              We're not just connecting you to farms—we're bringing the farm to your table
+              We&apos;re not just connecting you to farms—we&apos;re bringing the farm to your table
             </p>
           </div>
 
@@ -210,7 +210,7 @@ export default function Home() {
             Ready to Taste the Difference?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join thousands of customers who've discovered the joy of farm-fresh produce delivered to their door.
+            Join thousands of customers who&apos;ve discovered the joy of farm-fresh produce delivered to their door.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 

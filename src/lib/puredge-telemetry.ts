@@ -160,7 +160,7 @@ class PuredgeTelemetry {
       const inpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        this.recordPerformanceMetric('inp_ms', lastEntry.processingStart - lastEntry.startTime);
+        this.recordPerformanceMetric('inp_ms', (lastEntry as any).processingStart - lastEntry.startTime);
       });
       inpObserver.observe({ entryTypes: ['interaction'] });
 
@@ -521,9 +521,9 @@ export const puredgeTelemetry = new PuredgeTelemetry();
 
 // Export types for external use
 export type {
-  PuredgeTelemetryEvent,
-  ClarityMetrics,
-  ImmersionMetrics,
-  PerformanceMetrics,
-  PuredgeConfig
+  PuredgeTelemetryEvent as PuredgeTelemetryEventType,
+  ClarityMetrics as ClarityMetricsType,
+  ImmersionMetrics as ImmersionMetricsType,
+  PerformanceMetrics as PerformanceMetricsType,
+  PuredgeConfig as PuredgeConfigType
 };

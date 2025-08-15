@@ -169,7 +169,7 @@ export const EnhancedMap: React.FC<{
       zoom: 10,
       pitch: 45,
       bearing: 0,
-      antialias: true
+      // antialias: true // Not supported in MapLibre GL JS
     });
 
     // Add enhanced controls
@@ -429,7 +429,7 @@ export const EnhancedMap: React.FC<{
       });
 
       // Add smooth zoom and pan transitions
-      map.current.on('zoom', () => {
+      map.current?.on('zoom', () => {
         const zoom = map.current?.getZoom() || 0;
         const markers = document.querySelectorAll('.custom-marker');
         
@@ -440,11 +440,11 @@ export const EnhancedMap: React.FC<{
       });
 
       // Add map interaction feedback
-      map.current.on('movestart', () => {
+      map.current?.on('movestart', () => {
         document.body.style.cursor = 'grabbing';
       });
 
-      map.current.on('moveend', () => {
+      map.current?.on('moveend', () => {
         document.body.style.cursor = 'default';
       });
     });
