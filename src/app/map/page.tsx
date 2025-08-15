@@ -101,6 +101,10 @@ export default function MapPage() {
   // PuredgeOS 2.0: Add markers to map with enhanced functionality
   const addMarkersToMap = (farmsToShow: Farm[]) => {
     if (!mapRef.current) return;
+    
+    console.log('PuredgeOS 2.0: Adding markers for farms:', farmsToShow.length);
+    console.log('PuredgeOS 2.0: Map center:', mapRef.current.getCenter());
+    console.log('PuredgeOS 2.0: Map zoom:', mapRef.current.getZoom());
 
     farmsToShow.forEach((farm) => {
       if (typeof farm.lat === "number" && typeof farm.lng === "number") {
@@ -117,10 +121,13 @@ export default function MapPage() {
           cursor: pointer;
           transition: all ${PuredgeOS.motion.duration.base} ${PuredgeOS.motion.easing.smooth};
           animation: markerPulse 2s ease-in-out infinite;
-          position: relative;
+          position: absolute;
+          top: 0;
+          left: 0;
           transform: translate(-50%, -50%);
           min-width: 32px;
           min-height: 32px;
+          pointer-events: auto;
         `;
 
         // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
@@ -129,6 +136,11 @@ export default function MapPage() {
           @keyframes markerPulse {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -50%) scale(1.1); }
+          }
+          @keyframes markerBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            40% { transform: translate(-50%, -50%) translateY(-10px); }
+            60% { transform: translate(-50%, -50%) translateY(-5px); }
           }
         `;
         document.head.appendChild(style);
@@ -188,6 +200,8 @@ export default function MapPage() {
           .setLngLat([farm.lng, farm.lat])
           .setPopup(popup)
           .addTo(mapRef.current!);
+          
+        console.log(`PuredgeOS 2.0: Added marker for ${farm.name} at [${farm.lng}, ${farm.lat}]`);
 
         // PuredgeOS 2.0: Signature moment - marker click animation with haptic feedback
         markerEl.addEventListener('click', () => {
@@ -201,17 +215,6 @@ export default function MapPage() {
           markerEl.style.animation = 'none';
           void markerEl.offsetHeight; // Trigger reflow
           markerEl.style.animation = 'markerBounce 0.6s ease-out';
-          
-          // PuredgeOS 2.0: Immersion Calibration Matrix - Visual Motion 0.3-0.7s duration
-          const bounceStyle = document.createElement('style');
-          bounceStyle.textContent = `
-            @keyframes markerBounce {
-              0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
-              40% { transform: translate(-50%, -50%) translateY(-10px); }
-              60% { transform: translate(-50%, -50%) translateY(-5px); }
-            }
-          `;
-          document.head.appendChild(bounceStyle);
           
           // PuredgeOS 2.0: Zeigarnik Resolution - Open loops closed within 3 interactions
           setTimeout(() => {
@@ -305,7 +308,10 @@ export default function MapPage() {
           }
           
           // PuredgeOS 2.0: Add farm markers with cognitive load optimization
-          addMarkersToMap(farms);
+          // Small delay to ensure map is fully rendered
+          setTimeout(() => {
+            addMarkersToMap(farms);
+          }, 100);
         });
 
         // PuredgeOS 2.0: Handle map errors with graceful degradation
