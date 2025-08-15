@@ -485,7 +485,7 @@ export const PuredgeOSDesignSystem = {
 };
 
 // 🎨 CSS-in-JS helper functions
-export const createStyles = (styles: Record<string, any>) => {
+export const createStyles = (styles: Record<string, unknown>) => {
   return styles;
 };
 
@@ -549,17 +549,17 @@ export const getAnimation = (type: keyof typeof PuredgeOSDesignSystem.motion.ani
 // 🎨 Theme-aware color getter
 export const getColor = (path: string) => {
   const keys = path.split('.');
-  let value: any = PuredgeOSDesignSystem.colors;
+  let value: unknown = PuredgeOSDesignSystem.colors;
   
   for (const key of keys) {
-    value = value[key];
+    value = (value as Record<string, unknown>)[key];
     if (value === undefined) {
       console.warn(`Color not found: ${path}`);
       return '#000000';
     }
   }
   
-  return value;
+  return value as string;
 };
 
 // 🎨 Responsive helper
