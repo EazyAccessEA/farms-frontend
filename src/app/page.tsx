@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { PuredgeOSAestheticSystem } from '@/lib/puredgeos-aesthetic-system';
+import { EliteSiliconValleyColors, EliteBrandUtils } from '@/lib/silicon-valley-colors';
 import { puredgeTelemetry } from '@/lib/puredge-telemetry';
 
 // Enhanced Hero Component with Aesthetic Excellence
@@ -20,13 +20,9 @@ const AestheticHero: React.FC = () => {
 
   return (
     <section 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-elite-sophisticated"
       style={{
-        background: `linear-gradient(135deg, 
-          ${PuredgeOSAestheticSystem.colors.sky[50]} 0%, 
-          ${PuredgeOSAestheticSystem.colors.growth[50]} 50%, 
-          ${PuredgeOSAestheticSystem.colors.passion[50]} 100%)`,
-        padding: `${PuredgeOSAestheticSystem.spacing['5xl']} ${PuredgeOSAestheticSystem.spacing.xl}`,
+        padding: '6rem 2rem',
       }}
     >
       {/* Animated Background Elements */}
@@ -34,21 +30,21 @@ const AestheticHero: React.FC = () => {
         <div 
           className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-20"
           style={{
-            background: `radial-gradient(circle, ${PuredgeOSAestheticSystem.colors.sky[200]}, transparent)`,
+            background: `radial-gradient(circle, ${EliteSiliconValleyColors.teal[200]}, transparent)`,
             animation: 'float 20s ease-in-out infinite',
           }}
         />
         <div 
           className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full opacity-15"
           style={{
-            background: `radial-gradient(circle, ${PuredgeOSAestheticSystem.colors.growth[200]}, transparent)`,
+            background: `radial-gradient(circle, ${EliteSiliconValleyColors.lime[200]}, transparent)`,
             animation: 'float 25s ease-in-out infinite reverse',
           }}
         />
         <div 
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full opacity-10"
           style={{
-            background: `radial-gradient(circle, ${PuredgeOSAestheticSystem.colors.passion[200]}, transparent)`,
+            background: `radial-gradient(circle, ${EliteSiliconValleyColors.fog[200]}, transparent)`,
             animation: 'breathe 15s ease-in-out infinite',
           }}
         />
@@ -77,17 +73,14 @@ const AestheticHero: React.FC = () => {
         <div 
           className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         >
-          {/* Main Headline with Gradient Text */}
+          {/* Elite Silicon Valley Headline */}
           <h1 
-            className="mb-8 font-extrabold leading-tight"
+            className="mb-8 font-headline text-6xl md:text-7xl lg:text-8xl font-bold leading-tight text-white"
             style={{
-              fontSize: PuredgeOSAestheticSystem.typography.primary.sizes['7xl'],
-              fontWeight: PuredgeOSAestheticSystem.typography.display.weights.bold,
-              lineHeight: PuredgeOSAestheticSystem.typography.primary.lineHeights.tight,
               background: `linear-gradient(135deg, 
-                ${PuredgeOSAestheticSystem.colors.earth[900]} 0%, 
-                ${PuredgeOSAestheticSystem.colors.sky[700]} 50%,
-                ${PuredgeOSAestheticSystem.colors.growth[700]} 100%)`,
+                ${EliteSiliconValleyColors.obsidian[50]} 0%, 
+                ${EliteSiliconValleyColors.teal[400]} 50%,
+                ${EliteSiliconValleyColors.lime[400]} 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -97,15 +90,9 @@ const AestheticHero: React.FC = () => {
             <span className="block">Fresh Life</span>
           </h1>
 
-          {/* Subtitle with Personality */}
+          {/* Elite Silicon Valley Subtitle */}
           <p 
-            className="mb-12 max-w-3xl mx-auto"
-            style={{
-              fontSize: PuredgeOSAestheticSystem.typography.primary.sizes.xl,
-              fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.medium,
-              lineHeight: PuredgeOSAestheticSystem.typography.primary.lineHeights.relaxed,
-              color: PuredgeOSAestheticSystem.colors.earth[600],
-            }}
+            className="mb-12 max-w-3xl mx-auto font-body text-xl md:text-2xl text-fog-200 leading-relaxed"
           >
             Connect with local farms and discover nature&apos;s finest offerings. 
             Every bite tells a story of care, quality, and community.
@@ -115,31 +102,12 @@ const AestheticHero: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link href="/map">
               <button
-                className="group relative overflow-hidden px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105"
-                style={{
-                  background: `linear-gradient(135deg, 
-                    ${PuredgeOSAestheticSystem.colors.passion[500]} 0%, 
-                    ${PuredgeOSAestheticSystem.colors.passion[600]} 100%)`,
-                  color: 'white',
-                  boxShadow: PuredgeOSAestheticSystem.hierarchy.elevation.soft,
-                }}
+                className="group relative overflow-hidden px-8 py-4 rounded-xl font-headline font-semibold text-lg transition-all duration-300 transform hover:scale-105 bg-gradient-elite-accent text-obsidian-900 shadow-soft hover:shadow-medium"
                 onClick={() => {
                   puredgeTelemetry.recordImmersionMetric('cta_click', {
                     button: 'start_exploring',
                     timestamp: Date.now()
                   });
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = `linear-gradient(135deg, 
-                    ${PuredgeOSAestheticSystem.colors.passion[600]} 0%, 
-                    ${PuredgeOSAestheticSystem.colors.passion[700]} 100%)`;
-                  e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.strong;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = `linear-gradient(135deg, 
-                    ${PuredgeOSAestheticSystem.colors.passion[500]} 0%, 
-                    ${PuredgeOSAestheticSystem.colors.passion[600]} 100%)`;
-                  e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.soft;
                 }}
               >
                 <span className="relative z-10 flex items-center gap-2">
@@ -157,28 +125,12 @@ const AestheticHero: React.FC = () => {
 
             <Link href="/admin">
               <button
-                className="px-8 py-4 rounded-xl font-medium text-lg transition-all duration-300 border-2 hover:scale-105"
-                style={{
-                  background: 'transparent',
-                  color: PuredgeOSAestheticSystem.colors.earth[700],
-                  borderColor: PuredgeOSAestheticSystem.colors.earth[300],
-                  fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.medium,
-                }}
+                className="px-8 py-4 rounded-xl font-body font-medium text-lg transition-all duration-300 border-2 border-teal-600 text-teal-600 hover:scale-105 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700"
                 onClick={() => {
                   puredgeTelemetry.recordImmersionMetric('cta_click', {
                     button: 'become_farmer',
                     timestamp: Date.now()
                   });
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = PuredgeOSAestheticSystem.colors.growth[400];
-                  e.currentTarget.style.color = PuredgeOSAestheticSystem.colors.growth[700];
-                  e.currentTarget.style.background = PuredgeOSAestheticSystem.colors.growth[50];
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = PuredgeOSAestheticSystem.colors.earth[300];
-                  e.currentTarget.style.color = PuredgeOSAestheticSystem.colors.earth[700];
-                  e.currentTarget.style.background = 'transparent';
                 }}
               >
                 <span className="flex items-center gap-2">
@@ -237,28 +189,28 @@ const AestheticFeatureCards: React.FC = () => {
       icon: '👨‍🌾',
       title: 'Know Your Farmer',
       description: 'Meet the people growing your food. Every farmer is verified and personally known to us.',
-      gradient: [PuredgeOSAestheticSystem.colors.earth[400], PuredgeOSAestheticSystem.colors.earth[600]],
+      gradient: [EliteSiliconValleyColors.obsidian[400], EliteSiliconValleyColors.obsidian[600]],
       emotion: 'love'
     },
     {
       icon: '💰',
       title: 'Better Prices',
       description: 'Cut out the middleman. You pay the farmer directly, so you get better quality for less money.',
-      gradient: [PuredgeOSAestheticSystem.colors.passion[400], PuredgeOSAestheticSystem.colors.passion[600]],
+      gradient: [EliteSiliconValleyColors.lime[400], EliteSiliconValleyColors.lime[600]],
       emotion: 'strength'
     },
     {
       icon: '🤝',
       title: 'Support Local',
       description: 'Keep your money in your community. Every purchase directly supports local farmers and families.',
-      gradient: [PuredgeOSAestheticSystem.colors.growth[500], PuredgeOSAestheticSystem.colors.growth[700]],
+      gradient: [EliteSiliconValleyColors.teal[500], EliteSiliconValleyColors.teal[700]],
       emotion: 'peace'
     },
     {
       icon: '🌱',
       title: 'Eco-Friendly',
       description: 'Reduce food miles and packaging waste. Local delivery means a smaller carbon footprint.',
-      gradient: [PuredgeOSAestheticSystem.colors.sky[500], PuredgeOSAestheticSystem.colors.sky[700]],
+      gradient: [EliteSiliconValleyColors.fog[500], EliteSiliconValleyColors.fog[700]],
       emotion: 'wisdom'
     }
   ];
@@ -269,29 +221,12 @@ const AestheticFeatureCards: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 
-            className="mb-6 font-bold"
-            style={{
-              fontSize: PuredgeOSAestheticSystem.typography.primary.sizes['5xl'],
-              fontWeight: PuredgeOSAestheticSystem.typography.display.weights.bold,
-              color: PuredgeOSAestheticSystem.colors.earth[900],
-            }}
+            className="mb-6 font-headline text-4xl md:text-5xl font-bold text-obsidian-900"
           >
-            Why <span style={{
-              background: `linear-gradient(135deg, 
-                ${PuredgeOSAestheticSystem.colors.growth[600]} 0%, 
-                ${PuredgeOSAestheticSystem.colors.sky[600]} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>Farm Companion</span>?
+            Why <span className="bg-gradient-elite-primary bg-clip-text text-transparent">Farm Companion</span>?
           </h2>
           <p 
-            className="max-w-3xl mx-auto"
-            style={{
-              fontSize: PuredgeOSAestheticSystem.typography.primary.sizes.xl,
-              color: PuredgeOSAestheticSystem.colors.earth[600],
-              lineHeight: PuredgeOSAestheticSystem.typography.primary.lineHeights.relaxed,
-            }}
+            className="max-w-3xl mx-auto font-body text-xl text-obsidian-600 leading-relaxed"
           >
             We&apos;re not just connecting you to farms—we&apos;re bringing the farm to your table
           </p>
@@ -302,24 +237,13 @@ const AestheticFeatureCards: React.FC = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-2xl p-8 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
-              style={{
-                background: 'white',
-                boxShadow: PuredgeOSAestheticSystem.hierarchy.elevation.gentle,
-                border: `1px solid ${PuredgeOSAestheticSystem.colors.earth[100]}`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.powerful;
-                e.currentTarget.style.borderColor = PuredgeOSAestheticSystem.colors.growth[200];
+              className="group relative overflow-hidden rounded-2xl p-8 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 bg-white border border-fog-200 shadow-soft hover:shadow-medium hover:border-teal-200"
+              onMouseEnter={() => {
                 puredgeTelemetry.recordImmersionMetric('feature_card_hover', {
                   feature: feature.title,
                   emotion: feature.emotion,
                   timestamp: Date.now()
                 });
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.gentle;
-                e.currentTarget.style.borderColor = PuredgeOSAestheticSystem.colors.earth[100];
               }}
             >
               {/* Icon with Gradient Background */}
@@ -334,19 +258,12 @@ const AestheticFeatureCards: React.FC = () => {
 
               {/* Content */}
               <h3 
-                className="text-2xl font-bold mb-4"
-                style={{
-                  color: PuredgeOSAestheticSystem.colors.earth[900],
-                  fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.bold,
-                }}
+                className="text-2xl font-headline font-bold mb-4 text-obsidian-900"
               >
                 {feature.title}
               </h3>
               <p 
-                style={{
-                  color: PuredgeOSAestheticSystem.colors.earth[600],
-                  lineHeight: PuredgeOSAestheticSystem.typography.primary.lineHeights.normal,
-                }}
+                className="font-body text-obsidian-600 leading-relaxed"
               >
                 {feature.description}
               </p>
