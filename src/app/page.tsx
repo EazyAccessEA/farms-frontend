@@ -152,10 +152,7 @@ const AestheticHero: React.FC = () => {
               <div
                 key={index}
                 className="flex items-center gap-2 text-lg"
-                style={{
-                  color: PuredgeOSAestheticSystem.colors.earth[600],
-                  fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.medium,
-                }}
+                className="flex items-center gap-2 text-lg font-body text-obsidian-600"
               >
                 <span className="text-2xl">{item.icon}</span>
                 <span>{item.text}</span>
@@ -175,14 +172,14 @@ const AestheticFeatureCards: React.FC = () => {
       icon: '🌿',
       title: 'Taste the Difference',
       description: 'Fresh-picked produce that actually tastes like it should. No more bland supermarket vegetables.',
-      gradient: [PuredgeOSAestheticSystem.colors.growth[400], PuredgeOSAestheticSystem.colors.growth[600]],
+      gradient: [EliteSiliconValleyColors.teal[400], EliteSiliconValleyColors.teal[600]],
       emotion: 'joy'
     },
     {
       icon: '⚡',
       title: 'Same-Day Freshness',
       description: 'From farm to your door in hours, not days. Your produce is harvested the same day you order.',
-      gradient: [PuredgeOSAestheticSystem.colors.sky[400], PuredgeOSAestheticSystem.colors.sky[600]],
+      gradient: [EliteSiliconValleyColors.lime[400], EliteSiliconValleyColors.lime[600]],
       emotion: 'hope'
     },
     {
@@ -271,7 +268,12 @@ const AestheticFeatureCards: React.FC = () => {
               {/* Emotion Indicator */}
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span className="text-2xl">
-                  {PuredgeOSAestheticSystem.metaphors.emotions[feature.emotion as keyof typeof PuredgeOSAestheticSystem.metaphors.emotions]}
+                  {feature.emotion === 'joy' ? '😊' : 
+                   feature.emotion === 'hope' ? '✨' : 
+                   feature.emotion === 'love' ? '❤️' : 
+                   feature.emotion === 'strength' ? '💪' : 
+                   feature.emotion === 'peace' ? '🕊️' : 
+                   feature.emotion === 'wisdom' ? '🧠' : '🌟'}
                 </span>
               </div>
             </div>
@@ -286,13 +288,7 @@ const AestheticFeatureCards: React.FC = () => {
 const AestheticCTA: React.FC = () => {
   return (
     <section 
-      className="py-20 relative overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, 
-          ${PuredgeOSAestheticSystem.colors.sky[600]} 0%, 
-          ${PuredgeOSAestheticSystem.colors.growth[600]} 50%,
-          ${PuredgeOSAestheticSystem.colors.passion[600]} 100%)`,
-      }}
+      className="py-20 relative overflow-hidden bg-gradient-elite-innovation"
     >
       {/* Animated Background */}
       <div className="absolute inset-0">
@@ -308,19 +304,12 @@ const AestheticCTA: React.FC = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
         <h2 
-          className="text-4xl md:text-5xl font-bold text-white mb-6"
-          style={{
-            fontWeight: PuredgeOSAestheticSystem.typography.display.weights.bold,
-          }}
+          className="text-4xl md:text-5xl font-headline font-bold text-white mb-6"
         >
           Ready to Taste the Difference?
         </h2>
         <p 
-          className="text-xl mb-8"
-          style={{
-            color: PuredgeOSAestheticSystem.colors.sky[100],
-            lineHeight: PuredgeOSAestheticSystem.typography.primary.lineHeights.relaxed,
-          }}
+          className="text-xl mb-8 font-body text-fog-100 leading-relaxed"
         >
           Join thousands of customers who&apos;ve discovered the joy of farm-fresh produce delivered to their door.
         </p>
@@ -328,24 +317,12 @@ const AestheticCTA: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/map">
             <button
-              className="px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105"
-              style={{
-                background: 'white',
-                color: PuredgeOSAestheticSystem.colors.sky[600],
-                fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.semibold,
-                boxShadow: PuredgeOSAestheticSystem.hierarchy.elevation.soft,
-              }}
+              className="px-8 py-4 rounded-xl font-headline font-semibold text-lg transition-all duration-300 transform hover:scale-105 bg-white text-teal-600 shadow-soft hover:shadow-medium"
               onClick={() => {
                 puredgeTelemetry.recordImmersionMetric('cta_click', {
                   button: 'start_shopping',
                   timestamp: Date.now()
                 });
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.strong;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = PuredgeOSAestheticSystem.hierarchy.elevation.soft;
               }}
             >
               <span className="flex items-center gap-2">
@@ -357,13 +334,7 @@ const AestheticCTA: React.FC = () => {
           
           <Link href="/admin">
             <button
-              className="px-8 py-4 rounded-xl font-medium text-lg transition-all duration-300 border-2 hover:scale-105"
-              style={{
-                background: 'transparent',
-                color: 'white',
-                borderColor: 'white',
-                fontWeight: PuredgeOSAestheticSystem.typography.primary.weights.medium,
-              }}
+              className="px-8 py-4 rounded-xl font-body font-medium text-lg transition-all duration-300 border-2 border-white text-white hover:scale-105 hover:bg-white hover:text-obsidian-900"
               onClick={() => {
                 puredgeTelemetry.recordImmersionMetric('cta_click', {
                   button: 'become_farmer_cta',
