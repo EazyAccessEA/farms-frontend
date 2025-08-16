@@ -342,7 +342,7 @@ const AestheticCTA: React.FC = () => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'white';
-                e.currentTarget.style.color = PuredgeOSAestheticSystem.colors.sky[600];
+                e.currentTarget.style.color = '#00C2B2'; // Serum Teal
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'transparent';
