@@ -151,7 +151,6 @@ const AestheticHero: React.FC = () => {
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 text-lg"
                 className="flex items-center gap-2 text-lg font-body text-obsidian-600"
               >
                 <span className="text-2xl">{item.icon}</span>
