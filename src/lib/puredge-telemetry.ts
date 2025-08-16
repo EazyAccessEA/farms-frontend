@@ -21,6 +21,7 @@ export interface ClarityMetrics {
   task_success_rate: number;
   bounce_rate: number;
   user_comprehension: number;
+  page_view: number;
 }
 
 export interface ImmersionMetrics {
@@ -30,6 +31,9 @@ export interface ImmersionMetrics {
   social_sharing: number;
   emotional_engagement: number;
   signature_moment_engagement: number;
+  hero_engagement: number;
+  cta_click: number;
+  feature_card_hover: number;
 }
 
 export interface PerformanceMetrics {
@@ -512,7 +516,8 @@ class PuredgeTelemetry {
         time_to_first_action: 0,
         task_success_rate: 0.98,
         bounce_rate: 0.25,
-        user_comprehension: 0.95
+        user_comprehension: 0.95,
+        page_view: 1
       },
       immersion: {
         wow_moment_rate: 0.85,
@@ -520,7 +525,10 @@ class PuredgeTelemetry {
         return_rate: 0.45,
         social_sharing: 0.15,
         emotional_engagement: 0.78,
-        signature_moment_engagement: 0.92
+        signature_moment_engagement: 0.92,
+        hero_engagement: 0,
+        cta_click: 0,
+        feature_card_hover: 0
       },
       performance: {
         lcp_ms: 1200,

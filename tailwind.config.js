@@ -1,271 +1,363 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/app/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/lib/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      // PuredgeOS 2.0: Custom color palette
+      // 🚀 SILICON VALLEY S-TIER+ COLOR SYSTEM
       colors: {
+        // 🎯 PRIMARY PALETTE - Premium tech blue for trust and innovation
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49'
+          50: '#F0F9FF',   // Pure sky whisper
+          100: '#E0F2FE',  // Gentle morning light
+          200: '#BAE6FD',  // Soft cloud reflection
+          300: '#7DD3FC',  // Clear summer sky
+          400: '#38BDF8',  // Vibrant ocean blue
+          500: '#0EA5E9',  // Premium tech blue (main brand)
+          600: '#0284C7',  // Deep trust blue
+          700: '#0369A1',  // Professional depth
+          800: '#075985',  // Enterprise confidence
+          900: '#0C4A6E',  // Authority and power
         },
+
+        // 🌱 SECONDARY PALETTE - Growth and sustainability
         secondary: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e'
+          50: '#F0FDF4',   // Fresh spring morning
+          100: '#DCFCE7',  // Gentle growth light
+          200: '#BBF7D0',  // Soft leaf whisper
+          300: '#86EFAC',  // Vibrant new growth
+          400: '#4ADE80',  // Healthy plant green
+          500: '#22C55E',  // Premium growth green
+          600: '#16A34A',  // Mature success green
+          700: '#15803D',  // Deep forest wisdom
+          800: '#166534',  // Sustainable future
+          900: '#14532D',  // Nature's authority
         },
+
+        // 🔥 ACCENT PALETTE - Energy and passion
+        accent: {
+          50: '#FFF7ED',   // Warm sunset glow
+          100: '#FFEDD5',  // Gentle fire light
+          200: '#FED7AA',  // Soft flame whisper
+          300: '#FDBA74',  // Vibrant energy
+          400: '#FB923C',  // Dynamic passion
+          500: '#F97316',  // Premium innovation orange
+          600: '#EA580C',  // Bold action orange
+          700: '#C2410C',  // Deep determination
+          800: '#9A3412',  // Strong commitment
+          900: '#7C2D12',  // Unwavering focus
+        },
+
+        // 🎨 NEUTRAL PALETTE - Premium sophistication
+        neutral: {
+          50: '#FAFAFA',   // Pure luxury white
+          100: '#F5F5F5',  // Soft premium gray
+          200: '#E5E5E5',  // Gentle elegance
+          300: '#D4D4D4',  // Refined subtlety
+          400: '#A3A3A3',  // Sophisticated medium
+          500: '#737373',  // Premium neutral
+          600: '#525252',  // Deep sophistication
+          700: '#404040',  // Rich depth
+          800: '#262626',  // Premium dark
+          900: '#171717',  // Pure authority
+          950: '#0A0A0A',  // Ultimate luxury
+        },
+
+        // 🌟 SUCCESS PALETTE - Achievement and trust
         success: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          950: '#052e16'
+          50: '#F0FDF4',   // Success whisper
+          100: '#DCFCE7',  // Gentle achievement
+          200: '#BBF7D0',  // Soft victory
+          300: '#86EFAC',  // Clear success
+          400: '#4ADE80',  // Vibrant achievement
+          500: '#22C55E',  // Premium success green
+          600: '#16A34A',  // Deep trust
+          700: '#15803D',  // Mature success
+          800: '#166534',  // Sustainable achievement
+          900: '#14532D',  // Authority success
         },
+
+        // ⚠️ WARNING PALETTE - Attention and guidance
         warning: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-          950: '#451a03'
+          50: '#FFFBEB',   // Gentle attention
+          100: '#FEF3C7',  // Soft warning
+          200: '#FDE68A',  // Clear notice
+          300: '#FCD34D',  // Vibrant alert
+          400: '#FBBF24',  // Dynamic warning
+          500: '#F59E0B',  // Premium warning amber
+          600: '#D97706',  // Deep attention
+          700: '#B45309',  // Strong warning
+          800: '#92400E',  // Important notice
+          900: '#78350F',  // Critical attention
         },
+
+        // ❌ ERROR PALETTE - Guidance without anxiety
         error: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
-          950: '#450a0a'
-        }
+          50: '#FEF2F2',   // Gentle error
+          100: '#FEE2E2',  // Soft correction
+          200: '#FECACA',  // Clear guidance
+          300: '#FCA5A5',  // Vibrant alert
+          400: '#F87171',  // Dynamic error
+          500: '#EF4444',  // Premium error red
+          600: '#DC2626',  // Deep correction
+          700: '#B91C1C',  // Strong error
+          800: '#991B1B',  // Important correction
+          900: '#7F1D1D',  // Critical error
+        },
+
+        // 💡 INFO PALETTE - Clarity and guidance
+        info: {
+          50: '#EFF6FF',   // Gentle information
+          100: '#DBEAFE',  // Soft guidance
+          200: '#BFDBFE',  // Clear info
+          300: '#93C5FD',  // Vibrant knowledge
+          400: '#60A5FA',  // Dynamic information
+          500: '#3B82F6',  // Premium info blue
+          600: '#2563EB',  // Deep guidance
+          700: '#1D4ED8',  // Strong information
+          800: '#1E40AF',  // Important guidance
+          900: '#1E3A8A',  // Critical information
+        },
+
+        // 🌙 DARK MODE PALETTE - Premium dark experience
+        dark: {
+          50: '#0A0A0A',   // Pure dark luxury
+          100: '#171717',  // Deep premium dark
+          200: '#262626',  // Rich dark depth
+          300: '#404040',  // Sophisticated dark
+          400: '#525252',  // Medium dark
+          500: '#737373',  // Premium dark neutral
+          600: '#A3A3A3',  // Light dark text
+          700: '#D4D4D4',  // Bright dark text
+          800: '#E5E5E5',  // Pure dark text
+          900: '#F5F5F5',  // Ultimate dark contrast
+        },
+
+        // 🎭 EMOTIONAL TRIGGERS - Color psychology mapping
+        emotion: {
+          trust: '#0EA5E9',      // Premium tech blue
+          growth: '#22C55E',     // Premium growth green
+          innovation: '#F97316', // Premium innovation orange
+          luxury: '#171717',     // Deep premium dark
+          success: '#22C55E',    // Premium success green
+          warning: '#F59E0B',    // Premium warning amber
+          error: '#EF4444',      // Premium error red
+          info: '#3B82F6',       // Premium info blue
+          calm: '#F0F9FF',       // Pure sky whisper
+          energy: '#F97316',     // Premium innovation orange
+        },
+
+        // 🎨 SEMANTIC MAPPING - Context-aware colors
+        semantic: {
+          text: {
+            primary: '#171717',    // Deep premium dark
+            secondary: '#525252',  // Sophisticated medium
+            tertiary: '#A3A3A3',  // Refined subtlety
+            inverse: '#FAFAFA',   // Pure luxury white
+            disabled: '#D4D4D4',  // Gentle elegance
+          },
+          background: {
+            primary: '#FFFFFF',   // Pure luxury white
+            secondary: '#FAFAFA', // Soft premium gray
+            tertiary: '#F5F5F5', // Gentle elegance
+            inverse: '#171717',   // Deep premium dark
+            overlay: 'rgba(23, 23, 23, 0.8)', // Premium dark overlay
+          },
+          border: {
+            primary: '#E5E5E5',   // Gentle elegance
+            secondary: '#D4D4D4', // Refined subtlety
+            focus: '#0EA5E9',     // Premium tech blue
+            error: '#EF4444',     // Premium error red
+            success: '#22C55E',   // Premium success green
+          },
+          interactive: {
+            hover: '#F0F9FF',     // Pure sky whisper
+            active: '#E0F2FE',    // Gentle morning light
+            focus: '#BAE6FD',     // Soft cloud reflection
+            disabled: '#F5F5F5',  // Soft premium gray
+          },
+        },
+
+        // 🎪 LEGACY COMPATIBILITY - Your original colors
+        obsidian: '#1E1F23',      // Primary - Obsidian Graphite
+        teal: '#00C2B2',          // Accent - Serum Teal
+        fog: '#E4E2DD',           // Secondary - Sandstone Fog
+        lime: '#D4FF4F',          // Highlight - Solar Lime
+        midnight: '#121D2B',      // Overlay - Midnight Navy
+
+        // 🌟 LEGACY PuredgeOS Aesthetic System compatibility
+        sky: {
+          50: '#F0F9FF',
+          100: '#E0F2FE',
+          200: '#BAE6FD',
+          300: '#7DD3FC',
+          400: '#38BDF8',
+          500: '#0EA5E9',
+          600: '#0284C7',
+          700: '#0369A1',
+          800: '#075985',
+          900: '#0C4A6E',
+        },
+        growth: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D',
+        },
+        passion: {
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#F97316',
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12',
+        },
+        earth: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0A0A0A',
+        },
       },
-      
-      // PuredgeOS 2.0: Custom animations
+
+      // 🎨 PREMIUM TYPOGRAPHY SYSTEM
+      fontFamily: {
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Satoshi', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
+      },
+
+      // 📏 PREMIUM SPACING SYSTEM
+      spacing: {
+        'xs': '0.5rem',
+        'sm': '1rem',
+        'md': '1.5rem',
+        'lg': '2rem',
+        'xl': '3rem',
+        '2xl': '4rem',
+        '3xl': '6rem',
+        '4xl': '8rem',
+        '5xl': '12rem',
+      },
+
+      // 🎯 PREMIUM ELEVATION SYSTEM
+      boxShadow: {
+        'soft': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'medium': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'strong': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'intense': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        'extreme': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        'premium': '0 0 0 1px rgba(14, 165, 233, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'glow': '0 0 20px rgba(14, 165, 233, 0.3)',
+        'glow-strong': '0 0 40px rgba(14, 165, 233, 0.5)',
+      },
+
+      // 🌟 PREMIUM BLUR SYSTEM
+      backdropBlur: {
+        'soft': '4px',
+        'medium': '8px',
+        'strong': '12px',
+        'intense': '16px',
+      },
+
+      // 🎭 PREMIUM ANIMATION SYSTEM
       animation: {
-        'fadeIn': 'fadeIn 0.2s ease-out',
-        'fadeInUp': 'fadeInUp 0.3s ease-out',
-        'fadeInDown': 'fadeInDown 0.3s ease-out',
-        'scaleIn': 'scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        'slideInLeft': 'slideInLeft 0.3s ease-out',
-        'slideInRight': 'slideInRight 0.3s ease-out',
-        'bounce': 'bounce 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'pulse': 'pulse 2s ease-in-out infinite',
-        'float': 'float 3s ease-in-out infinite',
-        'glow': 'glow 2s ease-in-out infinite',
-        'heroEntrance': 'heroEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        'shimmer': 'shimmer 1.5s infinite',
+        'float': 'float 20s ease-in-out infinite',
+        'breathe': 'breathe 15s ease-in-out infinite',
+        'sparkle': 'sparkle 3s ease-in-out infinite',
+        'grow': 'grow 0.6s ease-out',
+        'magnetic': 'magnetic 0.3s ease-out',
+        'shimmer': 'shimmer 2s linear infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce-slow': 'bounce 2s infinite',
       },
-      
-      // PuredgeOS 2.0: Custom keyframes
+
+      // 🎬 PREMIUM KEYFRAMES
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' }
+        float: {
+          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+          '50%': { transform: 'translateY(-20px) rotate(180deg)' },
         },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' }
-        },
-        fadeInDown: {
-          '0%': { opacity: '0', transform: 'translateY(-20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' }
-        },
-        scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(0.9)' },
-          '100%': { opacity: '1', transform: 'scale(1)' }
-        },
-        slideInLeft: {
-          '0%': { opacity: '0', transform: 'translateX(-20px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' }
-        },
-        slideInRight: {
-          '0%': { opacity: '0', transform: 'translateX(20px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' }
-        },
-        bounce: {
+        breathe: {
           '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.05)' }
+          '50%': { transform: 'scale(1.05)' },
         },
-        pulse: {
-          '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.05)' }
+        sparkle: {
+          '0%, 100%': { opacity: '0', transform: 'scale(0) rotate(0deg)' },
+          '50%': { opacity: '1', transform: 'scale(1) rotate(180deg)' },
+        },
+        grow: {
+          '0%': { transform: 'scale(0.8) translateY(20px)', opacity: '0' },
+          '100%': { transform: 'scale(1) translateY(0)', opacity: '1' },
+        },
+        magnetic: {
+          '0%': { transform: 'translate(0, 0)' },
+          '100%': { transform: 'translate(var(--magnetic-x), var(--magnetic-y))' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '-200px 0' },
-          '100%': { backgroundPosition: 'calc(200px + 100%) 0' }
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' }
-        },
-        glow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(14, 165, 233, 0.3)' },
-          '50%': { boxShadow: '0 0 30px rgba(14, 165, 233, 0.5)' }
-        },
-        heroEntrance: {
-          '0%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' },
-          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
-        }
       },
-      
-      // PuredgeOS 2.0: Custom gradients
+
+      // 🎨 PREMIUM GRADIENT SYSTEM
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-        'gradient-secondary': 'linear-gradient(135deg, #d946ef 0%, #c026d3 100%)',
-        'gradient-success': 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-        'gradient-warning': 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-        'gradient-error': 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-        'gradient-neutral': 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        'gradient-glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-        'gradient-glass-dark': 'linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)',
-        'gradient-text-primary': 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
-        'gradient-text-secondary': 'linear-gradient(135deg, #d946ef 0%, #c026d3 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #0EA5E9 0%, #22C55E 100%)',
+        'gradient-innovation': 'linear-gradient(135deg, #F97316 0%, #0EA5E9 100%)',
+        'gradient-trust': 'linear-gradient(135deg, #22C55E 0%, #3B82F6 100%)',
+        'gradient-luxury': 'linear-gradient(135deg, #171717 0%, #0EA5E9 100%)',
+        'gradient-success': 'linear-gradient(135deg, #22C55E 0%, #F97316 100%)',
+        'gradient-shimmer': 'linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.3) 50%, transparent 75%)',
       },
-      
-      // PuredgeOS 2.0: Custom shadows
-      boxShadow: {
-        'glow': '0 0 20px rgba(14, 165, 233, 0.3)',
-        'glow-strong': '0 0 30px rgba(14, 165, 233, 0.5)',
-        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+
+      // 🎯 PREMIUM BORDER RADIUS SYSTEM
+      borderRadius: {
+        'xs': '0.25rem',
+        'sm': '0.375rem',
+        'md': '0.5rem',
+        'lg': '0.75rem',
+        'xl': '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
+        'full': '9999px',
       },
-      
-      // PuredgeOS 2.0: Custom spacing for Fitts' Law compliance
-      spacing: {
-        '18': '4.5rem', // 72px
-        '88': '22rem',  // 352px
-        '128': '32rem', // 512px
-      },
-      
-      // PuredgeOS 2.0: Custom font families
-      fontFamily: {
-        'primary': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        'secondary': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        'mono': ['SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', 'Courier New', 'monospace'],
-      },
-      
-      // PuredgeOS 2.0: Custom transition durations
+
+      // 🌟 PREMIUM TRANSITION SYSTEM
       transitionDuration: {
-        'instant': '0ms',
-        'fast': '100ms',
-        'base': '200ms',
-        'slow': '300ms',
-        'slower': '500ms',
-        'slowest': '700ms',
+        'fast': '150ms',
+        'normal': '300ms',
+        'slow': '500ms',
+        'slower': '700ms',
+        'slowest': '1000ms',
       },
-      
-      // PuredgeOS 2.0: Custom transition timing functions
+
       transitionTimingFunction: {
-        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
-        'spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        'spring': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'elastic': 'cubic-bezier(0.68, -0.6, 0.32, 1.6)',
-      },
-      
-      // PuredgeOS 2.0: Custom backdrop blur
-      backdropBlur: {
-        'xs': '2px',
-      },
-      
-      // PuredgeOS 2.0: Custom min-height for touch targets
-      minHeight: {
-        'touch': '3rem', // 48px for Fitts' Law compliance
-      },
-      
-      // PuredgeOS 2.0: Custom min-width for touch targets
-      minWidth: {
-        'touch': '3rem', // 48px for Fitts' Law compliance
+        'gentle': 'cubic-bezier(0.2, 0.8, 0.2, 1)',
       },
     },
   },
-  plugins: [
-    // PuredgeOS 2.0: Custom utilities
-    function({ addUtilities, theme }) {
-      const newUtilities = {
-        '.text-gradient-primary': {
-          'background': theme('backgroundImage.gradient-text-primary'),
-          '-webkit-background-clip': 'text',
-          '-webkit-text-fill-color': 'transparent',
-          'background-clip': 'text',
-        },
-        '.text-gradient-secondary': {
-          'background': theme('backgroundImage.gradient-text-secondary'),
-          '-webkit-background-clip': 'text',
-          '-webkit-text-fill-color': 'transparent',
-          'background-clip': 'text',
-        },
-        '.glass': {
-          'background': 'rgba(255, 255, 255, 0.25)',
-          'backdrop-filter': 'blur(10px)',
-          'border': '1px solid rgba(255, 255, 255, 0.18)',
-          'box-shadow': theme('boxShadow.glass'),
-        },
-        '.glass-dark': {
-          'background': 'rgba(0, 0, 0, 0.25)',
-          'backdrop-filter': 'blur(10px)',
-          'border': '1px solid rgba(255, 255, 255, 0.18)',
-          'box-shadow': theme('boxShadow.glass-dark'),
-        },
-        '.hover-lift': {
-          'transition': 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-        },
-        '.hover-lift:hover': {
-          'transform': 'translateY(-4px)',
-          'box-shadow': theme('boxShadow.2xl'),
-        },
-        '.hover-glow': {
-          'transition': 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-        },
-        '.hover-glow:hover': {
-          'box-shadow': theme('boxShadow.glow-strong'),
-        },
-        '.skeleton': {
-          'background': 'linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%)',
-          'background-size': '200% 100%',
-          'animation': 'shimmer 1.5s infinite',
-        },
-        '.min-touch-target': {
-          'min-height': '3rem',
-          'min-width': '3rem',
-        },
-      }
-      addUtilities(newUtilities)
-    }
-  ],
+  plugins: [],
 }

@@ -82,6 +82,19 @@
       "src/app/globals.css"
     ]
   },
+  "aesthetic_system": {
+    "enabled": true,
+    "source": "src/lib/puredgeos-aesthetic-system.ts",
+    "emotional_colors": true,
+    "typography_personality": true,
+    "spatial_poetry": true,
+    "motion_narrative": true,
+    "visual_metaphors": true,
+    "signature_moments": true,
+    "floating_elements": true,
+    "gradient_text": true,
+    "emotional_indicators": true
+  },
   "experimentation": {
     "enabled": true,
     "platform": "growthbook",
