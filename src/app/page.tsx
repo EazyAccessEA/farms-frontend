@@ -50,9 +50,9 @@ const AestheticHero: React.FC = () => {
         />
       </div>
 
-      {/* Floating Nature Elements */}
+      {/* Floating Elite Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {['🌿', '🌱', '🌾', '🍃', '🌺', '🌻'].map((element, i) => (
           <div
             key={i}
             className="absolute text-4xl opacity-20"
@@ -63,7 +63,7 @@ const AestheticHero: React.FC = () => {
               animationDelay: `${i * 0.5}s`,
             }}
           >
-            {Object.values(PuredgeOSAestheticSystem.metaphors.elements)[i % 6]}
+            {element}
           </div>
         ))}
       </div>
