@@ -335,3 +335,169 @@ export const CSSVariables = `
 `;
 
 export default SiliconValleyColors;
+
+// 🎪 ELITE SILICON VALLEY BRAND IDENTITY
+export const EliteSiliconValleyColors = {
+  // Obsidian Graphite - Primary brand color (intelligent, technical, quietly dominant)
+  obsidian: {
+    50: '#F8F9FA',
+    100: '#F1F3F4',
+    200: '#E8EAED',
+    300: '#DADCE0',
+    400: '#BDC1C6',
+    500: '#9AA0A6',
+    600: '#80868B',
+    700: '#5F6368',
+    800: '#3C4043',
+    900: '#1E1F23',  // Primary brand color
+    950: '#0F1012',
+  },
+  
+  // Serum Teal - Accent color (advanced medical-grade precision and innovation)
+  teal: {
+    50: '#E6FFFD',
+    100: '#B3FFF8',
+    200: '#80FFF3',
+    300: '#4DFFEE',
+    400: '#1AFFE9',
+    500: '#00E6D1',
+    600: '#00C2B2',  // Primary accent color
+    700: '#009E93',
+    800: '#007A74',
+    900: '#005655',
+    950: '#003736',
+  },
+  
+  // Sandstone Fog - Secondary color (warm greige for grounding)
+  fog: {
+    50: '#FDFCFB',
+    100: '#FAF9F7',
+    200: '#F5F3F0',
+    300: '#EFEDE9',
+    400: '#E9E7E3',
+    500: '#E4E2DD',  // Primary secondary color
+    600: '#D8D6D1',
+    700: '#C5C3BE',
+    800: '#B2B0AB',
+    900: '#9F9D98',
+    950: '#8C8A85',
+  },
+  
+  // Solar Lime - Highlight color (energetic but not aggressive)
+  lime: {
+    50: '#F7FFE6',
+    100: '#EDFFCC',
+    200: '#E3FFB3',
+    300: '#D9FF99',
+    400: '#CFFF80',
+    500: '#D4FF4F',  // Primary highlight color
+    600: '#B8E645',
+    700: '#9CCC3B',
+    800: '#80B231',
+    900: '#649827',
+    950: '#487E1D',
+  },
+  
+  // Midnight Navy - Overlay color (depth and sophistication)
+  midnight: {
+    50: '#F0F4F8',
+    100: '#D9E2EC',
+    200: '#BCCCDC',
+    300: '#9FB3C8',
+    400: '#829AB1',
+    500: '#627D98',
+    600: '#486581',
+    700: '#334E68',
+    800: '#243B53',
+    900: '#1A365D',
+    950: '#121D2B',  // Primary overlay color
+  },
+
+  // 🎭 ELITE BRAND EMOTIONS
+  emotions: {
+    intelligence: '#1E1F23',    // Obsidian - intelligent, technical, quietly dominant
+    precision: '#00C2B2',       // Serum Teal - advanced medical-grade precision
+    trust: '#E4E2DD',           // Sandstone Fog - warm greige for grounding
+    energy: '#D4FF4F',          // Solar Lime - energetic but not aggressive
+    sophistication: '#121D2B',  // Midnight Navy - depth and sophistication
+  },
+
+  // ✨ ELITE BRAND GRADIENTS
+  gradients: {
+    elite_primary: {
+      from: '#1E1F23',  // Obsidian Graphite
+      to: '#00C2B2',    // Serum Teal
+    },
+    elite_accent: {
+      from: '#00C2B2',  // Serum Teal
+      to: '#D4FF4F',    // Solar Lime
+    },
+    elite_sophisticated: {
+      from: '#121D2B',  // Midnight Navy
+      to: '#1E1F23',    // Obsidian Graphite
+    },
+    elite_innovation: {
+      from: '#D4FF4F',  // Solar Lime
+      to: '#00C2B2',    // Serum Teal
+    },
+    elite_trust: {
+      from: '#E4E2DD',  // Sandstone Fog
+      to: '#1E1F23',    // Obsidian Graphite
+    },
+  },
+
+  // 🎨 ELITE BRAND SEMANTICS
+  semantic: {
+    text: {
+      primary: '#1E1F23',    // Obsidian Graphite
+      secondary: '#5F6368',  // Obsidian 700
+      tertiary: '#9AA0A6',  // Obsidian 500
+      accent: '#00C2B2',     // Serum Teal
+      highlight: '#D4FF4F',  // Solar Lime
+    },
+    background: {
+      primary: '#FFFFFF',   // Pure white
+      secondary: '#FDFCFB', // Fog 50
+      tertiary: '#FAF9F7',  // Fog 100
+      overlay: '#121D2B',   // Midnight Navy
+      accent: '#E6FFFD',    // Teal 50
+    },
+    border: {
+      primary: '#E4E2DD',   // Sandstone Fog
+      secondary: '#D8D6D1', // Fog 600
+      accent: '#00C2B2',    // Serum Teal
+      highlight: '#D4FF4F', // Solar Lime
+    },
+  },
+};
+
+// 🎯 ELITE BRAND UTILITIES
+export const EliteBrandUtils = {
+  // Get elite gradient
+  getEliteGradient: (gradientName: keyof typeof EliteSiliconValleyColors.gradients) => {
+    const gradient = EliteSiliconValleyColors.gradients[gradientName];
+    return `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`;
+  },
+
+  // Get elite emotion color
+  getEliteEmotion: (emotion: keyof typeof EliteSiliconValleyColors.emotions) => {
+    return EliteSiliconValleyColors.emotions[emotion];
+  },
+
+  // Get elite semantic color
+  getEliteSemantic: (category: keyof typeof EliteSiliconValleyColors.semantic, type: string) => {
+    return EliteSiliconValleyColors.semantic[category][type as keyof typeof EliteSiliconValleyColors.semantic[typeof category]];
+  },
+
+  // Elite brand identity check
+  isEliteBrand: (color: string) => {
+    const eliteColors = [
+      '#1E1F23', // Obsidian
+      '#00C2B2', // Serum Teal
+      '#E4E2DD', // Sandstone Fog
+      '#D4FF4F', // Solar Lime
+      '#121D2B', // Midnight Navy
+    ];
+    return eliteColors.includes(color.toUpperCase());
+  },
+};

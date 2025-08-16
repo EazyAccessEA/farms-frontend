@@ -182,12 +182,81 @@ module.exports = {
           },
         },
 
-        // 🎪 LEGACY COMPATIBILITY - Your original colors
-        obsidian: '#1E1F23',      // Primary - Obsidian Graphite
-        teal: '#00C2B2',          // Accent - Serum Teal
-        fog: '#E4E2DD',           // Secondary - Sandstone Fog
-        lime: '#D4FF4F',          // Highlight - Solar Lime
-        midnight: '#121D2B',      // Overlay - Midnight Navy
+        // 🎪 ELITE SILICON VALLEY BRAND IDENTITY
+        // Obsidian Graphite - Primary brand color (intelligent, technical, quietly dominant)
+        obsidian: {
+          50: '#F8F9FA',
+          100: '#F1F3F4',
+          200: '#E8EAED',
+          300: '#DADCE0',
+          400: '#BDC1C6',
+          500: '#9AA0A6',
+          600: '#80868B',
+          700: '#5F6368',
+          800: '#3C4043',
+          900: '#1E1F23',  // Primary brand color
+          950: '#0F1012',
+        },
+        
+        // Serum Teal - Accent color (advanced medical-grade precision and innovation)
+        teal: {
+          50: '#E6FFFD',
+          100: '#B3FFF8',
+          200: '#80FFF3',
+          300: '#4DFFEE',
+          400: '#1AFFE9',
+          500: '#00E6D1',
+          600: '#00C2B2',  // Primary accent color
+          700: '#009E93',
+          800: '#007A74',
+          900: '#005655',
+          950: '#003736',
+        },
+        
+        // Sandstone Fog - Secondary color (warm greige for grounding)
+        fog: {
+          50: '#FDFCFB',
+          100: '#FAF9F7',
+          200: '#F5F3F0',
+          300: '#EFEDE9',
+          400: '#E9E7E3',
+          500: '#E4E2DD',  // Primary secondary color
+          600: '#D8D6D1',
+          700: '#C5C3BE',
+          800: '#B2B0AB',
+          900: '#9F9D98',
+          950: '#8C8A85',
+        },
+        
+        // Solar Lime - Highlight color (energetic but not aggressive)
+        lime: {
+          50: '#F7FFE6',
+          100: '#EDFFCC',
+          200: '#E3FFB3',
+          300: '#D9FF99',
+          400: '#CFFF80',
+          500: '#D4FF4F',  // Primary highlight color
+          600: '#B8E645',
+          700: '#9CCC3B',
+          800: '#80B231',
+          900: '#649827',
+          950: '#487E1D',
+        },
+        
+        // Midnight Navy - Overlay color (depth and sophistication)
+        midnight: {
+          50: '#F0F4F8',
+          100: '#D9E2EC',
+          200: '#BCCCDC',
+          300: '#9FB3C8',
+          400: '#829AB1',
+          500: '#627D98',
+          600: '#486581',
+          700: '#334E68',
+          800: '#243B53',
+          900: '#1A365D',
+          950: '#121D2B',  // Primary overlay color
+        },
 
         // 🌟 LEGACY PuredgeOS Aesthetic System compatibility
         sky: {
@@ -241,11 +310,21 @@ module.exports = {
         },
       },
 
-      // 🎨 PREMIUM TYPOGRAPHY SYSTEM
+      // 🎨 ELITE SILICON VALLEY TYPOGRAPHY SYSTEM
       fontFamily: {
+        // Inter - Body text (highly legible, subtle personality, trusted by Google, Linear, Vercel)
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        
+        // Satoshi - Headlines (ultra-clean neo-grotesk with modern proportions, Stripe × Apple vibes)
         display: ['Satoshi', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        
+        // Elite monospace for code and technical elements
         mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace'],
+        
+        // Brand-specific font families
+        headline: ['Satoshi', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        brand: ['Satoshi', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
 
       // 📏 PREMIUM SPACING SYSTEM
@@ -321,14 +400,29 @@ module.exports = {
         },
       },
 
-      // 🎨 PREMIUM GRADIENT SYSTEM
+      // 🎨 ELITE SILICON VALLEY GRADIENT SYSTEM
       backgroundImage: {
+        // Premium gradients
         'gradient-primary': 'linear-gradient(135deg, #0EA5E9 0%, #22C55E 100%)',
         'gradient-innovation': 'linear-gradient(135deg, #F97316 0%, #0EA5E9 100%)',
         'gradient-trust': 'linear-gradient(135deg, #22C55E 0%, #3B82F6 100%)',
         'gradient-luxury': 'linear-gradient(135deg, #171717 0%, #0EA5E9 100%)',
         'gradient-success': 'linear-gradient(135deg, #22C55E 0%, #F97316 100%)',
         'gradient-shimmer': 'linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.3) 50%, transparent 75%)',
+        
+        // Elite Silicon Valley brand gradients
+        'gradient-obsidian': 'linear-gradient(135deg, #1E1F23 0%, #3C4043 100%)',
+        'gradient-teal': 'linear-gradient(135deg, #00C2B2 0%, #00E6D1 100%)',
+        'gradient-fog': 'linear-gradient(135deg, #E4E2DD 0%, #F5F3F0 100%)',
+        'gradient-lime': 'linear-gradient(135deg, #D4FF4F 0%, #B8E645 100%)',
+        'gradient-midnight': 'linear-gradient(135deg, #121D2B 0%, #243B53 100%)',
+        
+        // Elite brand combinations
+        'gradient-elite-primary': 'linear-gradient(135deg, #1E1F23 0%, #00C2B2 100%)',
+        'gradient-elite-accent': 'linear-gradient(135deg, #00C2B2 0%, #D4FF4F 100%)',
+        'gradient-elite-sophisticated': 'linear-gradient(135deg, #121D2B 0%, #1E1F23 100%)',
+        'gradient-elite-innovation': 'linear-gradient(135deg, #D4FF4F 0%, #00C2B2 100%)',
+        'gradient-elite-trust': 'linear-gradient(135deg, #E4E2DD 0%, #1E1F23 100%)',
       },
 
       // 🎯 PREMIUM BORDER RADIUS SYSTEM
